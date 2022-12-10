@@ -1,0 +1,37 @@
+{% extends "coach/account/base.html" %}
+{% load static %}
+{% block content %}
+
+    <main class="bg-gold">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <h1>Наша команда!</h1>
+            </div>
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <p>Тут можно познакомиться с командой работников проекта!</p>
+            </div>
+        </div>
+        <div class="row card-deck">
+            <div class="m-sm-0 m-lg-5 m-md-3 col-12 col-sm-12 col-md-5 col-lg-2 bg-gold">
+                <img src="{% static 'img/Angelina.jpg' %}" class="card-img-top img-fluid rounded-circle w-100 h-50" alt="Backend разработчик">
+                <div class="card-body text-center">
+                    <h2 class="card-title">Анжелина</h2>
+                    <p class="card-text">Backend разработчик</p>
+                </div>
+
+            </div>
+            <div class="m-sm-0 m-lg-5 m-md-3 col-12 col-sm-12 col-md-5 col-lg-2 bg-gold">
+                <img src="{% static 'img/Seearo.jpg' %}" class="card-img-top img-fluid rounded-circle w-100 h-50" alt="Frontend разработчик">
+                <div class="card-body text-center">
+                    <h2 class="card-title">Seearo</h2>
+                    <p class="card-text">Вовер <br>с 5-летним стажем, frontend разработчик </p>
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </main>
+
+{% endblock %}

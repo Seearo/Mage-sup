@@ -1,0 +1,65 @@
+{% extends "superuser/base.html" %}
+{% load static %}
+
+{% block content %}
+    <main class="bg-gold">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <h1 class="text-center">Список Наставников</h1>
+                <!--<form method="post" action="wants_to_coach">
+                {% csrf_token %}
+                {% for candidate in wannabes %}
+                    <p>Кандидат: {{ candidate.username }}</p>
+                    <INPUT TYPE="radio" NAME={{ candidate.username }} VALUE="y">Назначить
+                    <INPUT TYPE="radio" NAME={{ candidate.username }} VALUE="n">Не назначить
+                    <INPUT TYPE="radio" NAME={{ candidate.username }} VALUE="k">Не выбрано
+                {% empty %}
+                    <p>Нет кандидатов в Наставники</p>
+                {% endfor %}
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                </form>  -->
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <h2>Меню профиля</h2>
+                <a href="/superuser/" class="nav-link">Админ</a>
+                <a href="../../admin/" class="nav-link">Админка</a>
+                <a href="../wants_to_coach.html" class="nav-link">Назначение</a>
+                <a href="../list_of_coaches.html/1" class="nav-link active btn-success">Наставники</a>
+                <a href="../settings.html" class="nav-link">Настройки</a>
+                <a href="../../account/profile.html/user_id{{ user.id }}" class="nav-link">Профиль</a>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                {% for coach in coaches %}
+                    <form method="post" action="/superuser/change_stars_level/{{ coach.coach_profile.user_id }}">
+                    {% csrf_token %}
+                    <p><a href="https://gamecoach.pythonanywhere.com/account/profile.html/user_id{{ coach.coach_profile.user_id }}">{{ coach.username }}</a> -
+                    {{coach.coach_profile.star_level.number}}   {{ stars_form.stars }}
+                    <button type="submit" class="btn btn-primary">Сохранить</button></p>
+                    </form>
+                {% empty %}
+                    <p>Нет Наставников</p>
+                {% endfor %}
+            </div>
+
+            <div class="pagination col-sm-12 col-md-6 col-lg-4">
+                <span class="step-links">
+                    {% if coaches.has_previous %}
+                        <a href="1">&laquo; Первая</a>
+                        <a href="{{ coaches.previous_page_number }}">Назад</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Страница {{ coaches.number }} из {{ coaches.paginator.num_pages }}.
+                    </span>
+
+                    {% if coaches.has_next %}
+                        <a href="{{ coaches.next_page_number }}">Далее</a>
+                        <a href="{{ coaches.paginator.num_pages }}">Последняя &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+
+        </div>
+    </main>
+
+{% endblock %}

@@ -1,0 +1,204 @@
+{% extends "coach/base.html" %}
+{% load static %}
+
+{% block bodyclass %}
+<body class="bg-body" id="bg-body">
+{% endblock %}
+
+{% block nav-item-index %}
+<li class="nav-item active">
+{% endblock %}
+
+{% block slideshow %}
+        <div id="demo" class="carousel slide" data-ride="carousel">
+
+            <!-- Indicators -->
+            <ul class="carousel-indicators">
+                <li data-target="#demo" data-slide-to="0" class="active"></li>
+                <li data-target="#demo" data-slide-to="1"></li>
+                <li data-target="#demo" data-slide-to="2"></li>
+            </ul>
+
+            <!-- The slideshow -->
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="{% static 'img/gamer.jpg' %}" alt="Los Angeles" class="screen">
+                </div>
+                <div class="carousel-item">
+                    <img src="{% static 'img/learn-girl.jpg' %}" alt="Chicago" class="screen">
+
+                </div>
+                <div class="carousel-item">
+                    <img src="{% static 'img/social%20media%20logo%20for%20PvP%20Group.jpg' %}" alt="New York" class="screen">
+                </div>
+            </div>
+
+            <!-- Left and right controls -->
+            <a class="carousel-control-prev" href="#demo" data-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </a>
+            <a class="carousel-control-next" href="#demo" data-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </a>
+        </div>
+{% endblock %}
+
+{% block content %}
+
+    <main class="container mt-0 bg-gold" id="bg-gold">
+        <div style="height: 20vh;" class="row w-100"></div>
+        <div class="row">
+            <div class="col-sm-12 text-center bg-dark-orange">
+                <h2>Приветствуем вас на сайте платформы GTL</h2>
+                <p>Платформа {{trademark}} разработана геймерами и для геймеров! Тут вы сможете набраться опыта, получая знания от опытных игроков! Вступить в команду для турниров на базе {{trademark}} с получением в ваше распоряжение наставника из числа участников проекта, а по достижении видимых результатов получить предложение на участие в работе нашего проекта в виде наставника, аналитика или менеджера! </p>
+            </div>
+            <div style="height: 20vh;" class="row w-100"></div>
+            <div class="col-sm-12 col-md-6 text-center bg-dark-orange">
+                <h2>Получить exp!</h2>
+                <p>Мы все через это проходили. То чувство, когда ты молодой и горячий, но тебе не достаёт опыта. {{trademark}} призван исправить эту проблему и ускорить получение Экспы. На нашей платформе вы сможете в короткие сроки получить отличную базу как для простых каток в компании друзей, так и для получения призовых мест на различных турнирах. Всё зависит только от вас!</p>
+                <a class="btn btn-primary" href="random.html">
+                    <p>Начни со случайного наставника! Протестируй нас</p>
+                </a>
+            </div>
+            <div class="col-sm-12 col-md-6 text-center bg-dark-orange">
+                <h2>Стать Наставником!</h2>
+                <p>У Вас огромный опыт игр? Победы не приносят былого удовлетворения? Вы знаете ходы противника задолго до их действий? Поздравляем! Вы достигли определённого результата, но что дальше? Где это применять? Теперь у Вас есть возможность реализовывать полученные навыки! Влияйте на будущее уже сегодня! Научите юных и не очень игроков самым крутым финтам и повышайте уровень кибер-спорта. Весь функционал на {{trademark}}!</p>
+                <a href="#" class="btn btn-primary"><p>Переход в личный кабинет, если есть регистрация. </p></a>
+            </div>
+        </div>
+        <div style="height: 20vh;" class="row w-100"></div>
+        <div class="col-sm-12 text-center">
+            <div class="col-sm-12">
+                <h2>Почему мы?</h2>
+            </div>
+            <div style="height: 10vh;" class="row w-100"></div>
+            <div class="row flex bg-dark-orange">
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <h3>Мы знаем игры!</h3>
+                    <p>Мы понимаем особенности игр! Понимаем, потому что сами играли или играем в них!</p>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <h3>Удобный интерфейс</h3>
+                    <p>Мы старались продумать каждую деталь для вашего удобства в обучении или наставничестве. Платформа разработана специально для этого.</p>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <h3>Play like a pro!</h3>
+                    <p>Играй, как про - это не просто наш слоган. Мы стараемся прививать профессиональную игру всем!</p>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <h3>Мы продаём скилл, а не пиксели!</h3>
+                    <p>Сейчас вы можете купить в играх почти всё! Будь это звание, редкая вещица или валюта, но приносит ли оно наслаждение? У нас вы играете сами! Вы учитесь у опытных игроков и применяете знания на практике!</p>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <h3>Разные направления</h3>
+                    <p>Вы можете найти наставников на любой аспект игры. Будь это пвп, пве и даже экономика!</p>
+                </div>
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <h3>Уровни квалификаций</h3>
+                    <p>Тут качаете лвл не только вы, но и наши наставники. Чем выше уровень наставника, тем большему он может научить!</p>
+                </div>
+            </div>
+        </div>
+        <div style="height: 20vh;" class="row w-100"></div>
+        <div class="col-sm-12 text-center">
+            <h2>Часто задаваемые вопросы.</h2>
+        </div>
+        <div style="height: 10vh;" class="row w-100"></div>
+        <div id="accordion">
+
+            <div class="card">
+                <div class="card-header">
+                    <a class="card-link" data-toggle="collapse" href="#collapseOne">
+                        Чем сервис {{trademark}} отличается от бустов на других сайтах?
+                    </a>
+                </div>
+                <div id="collapseOne" class="collapse show" data-parent="#accordion">
+                    <div class="card-body">
+                        <p>Наш сервис оказывает услуги по повышению навыков у начинающих и средних игроков в компьютерные игры. Мы отличаемся тем, что занимаемся непосредственно самим игроком, учим его правильно и адекватно относиться к игровому процессу. Показываем «фишки» и подводные камни. При этом наша работа более трудоёмкая и требует больших затрат сил, но на цену это не влияет!</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+                        Как проходят занятия в {{trademark}}?
+                    </a>
+                </div>
+                <div id="collapseTwo" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        <p>Тут всё зависит от Вас! Вы можете быть гостем нашего сайта и тогда вам будет доступен только раздел для случайного поиска наставника с использованием ваших личных данных. Для пользователя с регистрацией мы открываем полную систему для занятий. В неё входят «закладки», электронный дневник, таргетный поиск по нику и другим данным и таргетная регистрация на занятия.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
+                        Сколько проходят занятия?
+                    </a>
+                </div>
+                <div id="collapseThree" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        <p>Вы оплачиваете 45 минут времени за работу наставника.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseFour">
+                        Занятия по каким играм вы поддерживаете?
+                    </a>
+                </div>
+                <div id="collapseFour" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        <p>Мы поддерживаем все игры из списка случайной регистрации и таргетной (доступной после регистрации на сайте).</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row text-center">
+            <div class="col-sm-12">
+                <h2>Наставники месяца</h2>
+            </div>
+            <div class="card-deck text-white">
+
+                <div class="card bg-primary">
+                    <img class="card-img-top" src="{% static 'img/test-coach-img.jpg' %}" alt="Card image">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">Кристина "MinusDva" Антонова</h4>
+                        <p class="card-text">Учу игре в Overwatch. Мой рейтинг 3500+ и более 800 часов игры!</p>
+                        <a {{profileToCoach}}} class="btn btn-warning">
+                                <h3>Профиль ></h3>
+                            </a>
+                    </div>
+                </div>
+
+
+                <div class="card bg-primary">
+                    <img class="card-img-top" src="{% static 'img/test-coach-img.jpg' %}" alt="Card image">
+                    <div class="card-body text-center">
+                        <h4 class="card-title">{{firstName}} {{"nickName"}} {{lastName}}</h4>
+                        <p class="card-text">{{infoCoach}}</p>
+                        <a {{profileToCoach}}} class="btn btn-warning">
+                                <h3>Профиль ></h3>
+                            </a>
+
+                    </div>
+                </div>
+                <div class="card bg-primary">
+                    <img class="card-img-top" src="{% static 'img/test-coach-img.jpg' %}" {{cardImgAlt}}>
+                    <div class="card-body text-center">
+                        <h4 class="card-title">{{firstName}} {{"nickName"}} {{lastName}}</h4>
+                        <p class="card-text">{{infoCoach}}</p>
+                        <a {{profileToCoach}}} class="btn btn-warning">
+                                <h3>Профиль ></h3>
+                            </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+{% endblock %}

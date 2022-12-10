@@ -1,0 +1,22 @@
+{% extends "superuser/base.html" %}
+{% load static %}
+
+{% block content %}
+    <main class="bg-gold">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <h1 class="text-center">Управление сайтом</h1>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <h2>Меню профиля</h2>
+                <a href="/superuser/" class="nav-link active btn-success">Админ</a>
+                <a href="../../admin/" class="nav-link">Админка</a>
+                <a href="wants_to_coach.html" class="nav-link">Назначение</a>
+                <a href="list_of_coaches.html/1" class="nav-link">Наставники</a>
+                <a href="settings.html" class="nav-link">Настройки</a>
+                <a href="../../account/profile.html/user_id{{ user.id }}" class="nav-link">Профиль</a>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

@@ -1,0 +1,133 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% block content %}
+
+    <main class="bg-gold">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <h1 class="text-center">Дневник</h1>
+            </div>
+           <div class="col-sm-12 col-md-4  col-lg-4">
+               <h2>Меню профиля</h2>
+                {% if user.is_superuser %}
+                <a href="../../superuser/" class="nav-link">Админ</a>
+                {% endif %}
+                <a href="profile.html/user_id{{ user.id }}" class="nav-link">Профиль</a>
+                {% if new_diary > 0 %}
+                    <a href="diary.html" class="nav-link active btn-success">Дневник ({{ new_diary }})</a>
+                {% else %}
+                    <a href="diary.html" class="nav-link active btn-success">Дневник</a>
+                {% endif %}
+                <a href="bookmarks.html" class="nav-link">Закладки</a>
+                {% if user.profile.is_coach %}
+                <a href="../coach_office/user_id{{ user.id }}" class="nav-link">Наставник</a>
+                {% endif %}
+                <a href="timetable.html" class="nav-link">Расписание</a>
+                {% if new_messages > 0 %}
+                    <a href="message.html" class="nav-link">Сообщения ({{ new_messages }})</a>
+                {% else %}
+                    <a href="message.html" class="nav-link">Сообщения</a>
+                {% endif %}
+                <a href="friends.html" class="nav-link">Друзья</a>
+                <a href="blacklist.html" class="nav-link">Чёрный список</a>
+                <a href="account.html" class="nav-link">Настройки</a>
+
+                <form method="post" class="form-group" action="../account/diary_sorting">
+                    {% csrf_token %}
+                    <p>Сортировка по:</p>
+                    {{ diary_sorting_form.diary_sorting }}
+                    <button type="submit" class="btn btn-primary">Применить</button>
+                </form>
+
+            </div>
+            <div class="col-sm-12 col-md-8 col-lg-8">
+                {% for registration in registrations %}
+                    <div class="container">
+                        {% if registration.coach == user.profile %}
+                            {% if registration.student.photo %}
+                                <img src="{{ registration.student.photo.url }}" alt="" style="width:90px">
+                            {% endif %}
+                            {% if registration.student.nickname %}
+                            <p><span>Студент {{ registration.student.user.first_name }} {{ registration.student.nickname }} {{ registration.student.user.last_name }}</span></p>
+                            {% else %}
+                            <p><span>Студент {{ registration.student.user.first_name }} {{ registration.student.user.username }} {{ registration.student.user.last_name }}</span></p>
+                            {% endif %}
+                        {% else %}
+                            {% if registration.coach.photo %}
+                                <img src="{{ registration.coach.photo.url }}" alt="" style="width:90px">
+                            {% endif %}
+                            {% if registration.coach.nickname %}
+                            <p><span>Наставник {{ registration.coach.user.first_name }} {{ registration.coach.nickname }} {{ registration.coach.user.last_name }}</span></p>
+                            {% else %}
+                            <p><span>Наставник {{ registration.coach.user.first_name }} {{ registration.coach.user.username }} {{ registration.coach.user.last_name }}</span></p>
+                            {% endif %}
+                        {% endif %}
+                        <p>{{ registration.date }} {{ registration.time }}</p>
+                        <p>Сегодня мы провели первую ознакомительную игру. Ты показала основных героев, но их мало и они в основном саппорты. Тебе нужно понимать игру и на других героях! Из этого я даю тебе задание до следующего занятия</p>
+                        {% if registration.coach == user.profile and registration.confirmation_student == 1 %}
+                            <p><span>Урок подтверждён студентом, Вы получили 1000 опыта</span></p>
+                        {% elif  registration.student == user.profile and registration.confirmation_coach == 1 %}
+                            <p><span>Урок подтверждён Наставником, Вы получили 1000 опыта</span></p>
+                        {% elif registration.coach == user.profile and registration.confirmation_student == 0 %}
+                            <p><span>Студент пока не подтвердил урок, опыт не получен</span></p>
+                        {% elif  registration.student == user.profile and registration.confirmation_coach == 0 %}
+                            <p><span>Наставник пока не подтвердил урок, опыт не получен</span></p>
+                        {% endif %}
+                        {% if registration.coach == user.profile and registration.confirmation_coach == 0 %}
+                            <form method="post" class="form-group" action="../account/confirm_registration_id={{ registration.id }}_next={{ request.get_full_path }}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary">Подтвердить, что урок прошёл</button>
+                            </form>
+                        {% elif  registration.student == user.profile and registration.confirmation_student == 0 %}
+                            <form method="post" class="form-group" action="../account/confirm_registration_id={{ registration.id }}_next={{ request.get_full_path }}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-primary">Подтвердить, что урок прошёл</button>
+                            </form>
+                        {% endif %}
+                        <div class="btn-group dropup">
+                            <button class="btn btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                ...
+                            </button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" id="dark-orange" href="#">Написать комментарий</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" id="dark-orange" href="#">Пожаловаться</a>
+                                <a class="dropdown-item" id="dark-orange" href="#">Удалить</a>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    {% if diary_sorting == 1 %}
+                        <p>Нет непросмотренных обновлений Дневника</p>
+                    {% elif diary_sorting == 2 or diary_sorting == 3 %}
+                        <p>Пока нет прошедших занятий в качестве Наставника</p>
+                    {% else %}
+                        <p>Пока нет прошедших занятий в качестве студента</p>
+                    {% endif %}
+                {% endfor %}
+
+                {% if registrations %}
+                <div class="pagination col-sm-12 col-md-6 col-lg-4">
+                    <span class="step-links">
+                        {% if registrations.has_previous %}
+                            <a href="diary1.html">&laquo; Первая</a>
+                            <a href="diary{{ registrations.previous_page_number }}.html">Назад</a>
+                        {% endif %}
+
+                        <span class="current">
+                            Страница {{ registrations.number }} из {{ registrations.paginator.num_pages }}
+                        </span>
+
+                        {% if registrations.has_next %}
+                            <a href="diary{{ registrations.next_page_number }}.html">Далее</a>
+                            <a href="diary{{ registrations.paginator.num_pages }}.html">Последняя &raquo;</a>
+                        {% endif %}
+                    </span>
+                </div>
+                {% endif %}
+            </div>
+
+        </div>
+    </main>
+
+{% endblock %}

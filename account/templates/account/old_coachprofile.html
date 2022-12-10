@@ -1,0 +1,250 @@
+{% extends "account/baseprofile.html" %}
+{% load static %}
+
+{% block bodyclass %}
+<body class="">
+{% endblock %}
+
+{% block content %}
+    <main class="bg-gold">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <h1 class="text-center">Аккаунт</h1>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <h2>Меню профиля</h2>
+                {% if user.is_superuser %}
+                <a href="../../superuser/" class="nav-link">Админ</a>
+                {% endif %}
+                <a href="../profile.html/user_id{{ user.id }}" class="nav-link active btn-success">Профиль</a>
+                <a href="../diary.html" class="nav-link">Дневник</a>
+                <a href="../bookmarks.html" class="nav-link">Закладки</a>
+                {% if user.profile.is_coach %}
+                <a href="../../coach_office/user_id{{ user.id }}" class="nav-link">Наставник</a>
+                {% endif %}
+                <a href="../timetable.html" class="nav-link">Расписание</a>                
+                {% if new_messages > 0 %}
+                    <a href="../message.html" class="nav-link">Сообщения ({{ new_messages }})</a>
+                {% else %}
+                    <a href="../message.html" class="nav-link">Сообщения</a>
+                {% endif %}
+                <a href="../friends.html" class="nav-link">Друзья</a>
+                <a href="../blacklist.html" class="nav-link">Чёрный список</a>
+                <a href="../account.html" class="nav-link">Настройки</a>
+                <a href="#" class="nav-link bg-danger">На урок!</a>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <div class="card-columns">
+                    <div class="card">
+                        <img class="card-img-top" src={{ photo }} alt=''>
+                        <!--<form method="post" action="../upload_photo" enctype="multipart/form-data">-->
+                        <!--    {% csrf_token %}-->
+                        <!--    {{ upload_photo_form.photo }}-->
+                            <!-- <button class="btn btn-primary">Загрузить фото</button> -->
+                        <!--    <button type="submit" class="btn btn-primary">Сохранить</button>-->
+                        <!--</form>-->
+
+                        <!-- Кнопка Удалить из друзей подразумивает наличие соц составляющей. Решай сам!-->
+                        <!-- <button class="btn btn-danger">Удалить из друзей</button>
+                        <button class="btn btn-success">Добавить в друзья</button>
+                        <button class="btn btn-warning">Ваша заявка принята</button>
+                        <button class="btn btn-warning">Написать сообщение</button>-->
+                    </div>
+                    <h2>{{ user.first_name }} {{ user.profile.nickname }} {{ user.last_name }}</h2>
+                </div>
+                <div class="form-group">
+
+                    <label class="col-sm-10 col-md-10 col-lg-10 w-100 col-form-label">Уровень пользователя
+                        <div class="col-sm-10 col-md-10 col-lg-10 w-100">
+                            <input type="text" readonly class="form-control-plaintext" id="Lvl" value={{ user.profile.level }}>
+                        </div>
+                        <label for="expLvl" class="w-100  col-form-label">Опыта получено</label>
+                        <div class="col-sm-10 col-md-10 col-lg-10">
+                            <input type="text" readonly class="form-control-plaintext" id="expLvl" value="{{ user.profile.experience }}/{{ level_up }}">
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: {{ value_now }}%" aria-valuenow={{ value_now }} aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+
+                           {% if gamedirection1 and gamedirection1 != "account.GameDirection.None" %}
+                            <br/>
+                            {% if gamedirection1.game %}
+                                <p>Ваша игра: {{ gamedirection1.game }}</p>
+                                <br/>
+                            {% endif %}
+                            {% if gamedirection1.direction %}
+                                <p>Ваше направление: {{ gamedirection1.direction }}</p>
+                                <br/>
+                            {% endif %}
+                            {% if gamedirection1.region %}
+                                <p>Ваш регион: {{ gamedirection1.region }}</p>
+                                <br/>
+                            {% endif %}
+                          {% endif %}
+                        <br/>
+                    <p>{{ user.profile.contacts }}</p>
+                    </label>
+                </div>
+
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <a href="#" target="_blank">
+                    <p>Достижения:</p>
+                </a>
+                <p><span class="points">10</span> очков</p>
+                <div class="w-100 bg-danger">
+                    <p>Первый пользователь</p>
+                    <h3>10 очков</h3>
+                </div>
+                {{achiveLast}}
+                {{achiveLast}}
+                {{achiveLast}}
+                <div>
+                    <h3>Расписание</h3>
+                    <div>
+                        <a href="#">
+                            <div class="container bg-danger text-white">
+                                <img src="img/test-coach-img.jpg" alt="Avatar" style="width:90px">
+                                <p><span>Кристина "MinusDva" Антонова</span> 5 звезд</p>
+                                <p>Занятие начнется через {{timeToCoach}}</p>
+                                <!-- Это будущий урок по расписанию. Система показывает парочку записей ближайших. Бeдет ок возможность зайти в профиль по клику. Первая рамка - это запись к каучу, а вторая - это кауч уведомление как если бы человек (кауч) должен был бы пойти на занятие, а после провести сам другое-->
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="container bg-success text-white">
+                        <img src="img/test-coach-img.jpg" alt="Avatar" style="width:90px">
+                        <p><span>Кристина "MinusDva" Антонова</span> 5 звезд</p>
+                        <p>Вы начнете вести занятие через {{timeToCoach}}</p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="chat-with-coach">
+            <button data-toggle="collapse" data-target="#demo" class="btn btn-primary">У вас сообщение!</button>
+            <div id="demo" class="collapse bg-primary">
+                <h1 class="text-center">Чат</h1>
+                <div class="coach-m">
+                    <p>Привет! До урока 10 минут!</p>
+                </div>
+                <div class="to-coach-m">
+                    <p>Ок! Вот мой ник! VasyaPro</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row text-center">
+            <div class="text-center col-sm-12 col-md-12 col-lg-12">
+
+                <h1>Аккаунт наставника</h1>
+                </br>
+                {% if user.coach_profile.inactive_flag %}
+                <p>Аккаунт Наставника отключён</p>
+                {% endif %}
+                <p>{{ user.first_name }} {{ user.profile.nickname }} {{ user.last_name }}</p>
+            </div>
+
+
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <p>Уровень звёзд</p>
+                <p>{{ user.coach_profile.star_level.name }}</p>
+                <p>Уровень пользователя</p>
+                <p>{{ user.profile.level }}</p>
+                <p>Опыта получено</p>
+                <p>{{ user.profile.experience }}/{{ level_up }}</p>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: {{ value_now }}%" aria-valuenow="{{ value_now }}" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+
+
+            </div>
+
+            <div class="col-sm-12 col-md-6 col-lg-4">
+
+                           {% if gamedirection2 and gamedirection2 != "account.GameDirection.None" %}
+                            <h3>Игра 1</h3>
+                            <br/>
+                            {% if gamedirection2.game %}
+                                <p>Ваша игра: {{ gamedirection2.game }}</p>
+                                <br/>
+                            {% endif %}
+                            {% if gamedirection2.direction %}
+                                <p>Ваше направление: {{ gamedirection2.direction }}</p>
+                                <br/>
+                            {% endif %}
+                            {% if gamedirection2.region %}
+                                <p>Ваш регион: {{ gamedirection2.region }}</p>
+                                <br/>
+                            {% endif %}
+                          {% endif %}
+
+                           {% if gamedirection3 and gamedirection3 != "account.GameDirection.None" %}
+                            <h3>Игра 2</h3>
+                            <br/>
+                            {% if gamedirection3.game %}
+                                <p>Ваша игра: {{ gamedirection3.game }}</p>
+                                <br/>
+                            {% endif %}
+                            {% if gamedirection3.direction %}
+                                <p>Ваше направление: {{ gamedirection3.direction }}</p>
+                                <br/>
+                            {% endif %}
+                            {% if gamedirection3.region %}
+                                <p>Ваш регион: {{ gamedirection3.region }}</p>
+                                <br/>
+                            {% endif %}
+                          {% endif %}
+
+                           {% if gamedirection4 and gamedirection4 != "account.GameDirection.None" %}
+                            <h3>Игра 3</h3>
+                            <br/>
+                            {% if gamedirection4.game %}
+                                <p>Ваша игра: {{ gamedirection4.game }}</p>
+                                <br/>
+                            {% endif %}
+                            {% if gamedirection4.direction %}
+                                <p>Ваше направление: {{ gamedirection4.direction }}</p>
+                                <br/>
+                            {% endif %}
+                            {% if gamedirection4.region %}
+                                <p>Ваш регион: {{ gamedirection4.region }}</p>
+                                <br/>
+                            {% endif %}
+                          {% endif %}
+
+
+                <p>{{ user.coach_profile.contacts }}</p>
+                <p>{{ user.coach_profile.strengths }}</p>
+                <p>{{ user.coach_profile.description }}</p>
+                <p>{{ user.coach_profile.game_accounts.url }}</p>
+
+            </div>
+
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <div class="card">
+                    <img class="card-img-top" src={{photo }}>
+                    <div>
+                        {% for star in num_stars %}
+                            <span class="fa fa-star checked"></span>
+                        {% endfor %}
+
+                        {% for star in no_stars %}
+                            <span class="fa fa-star"></span>
+                        {% endfor %}
+                    </div>
+                    <div class="mt-3">
+                        <span class="fa fa-vk"></span>
+                        <span class="fa fa-youtube"></span>
+                        <span class="fa fa-telegram"></span>
+                        <span class="fa fa-twitch"></span>
+                        <span class="fa fa-instagram"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+
+{% endblock %}

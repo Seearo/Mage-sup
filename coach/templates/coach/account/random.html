@@ -1,0 +1,149 @@
+{% extends "coach/account/base.html" %}
+{% load static %}
+{% block content %}
+
+    <main class="bg-gold">
+        <div class="row text-center">
+            <div class="col-sm-12 col-md-6 col-lg-4 bg-dark-orange">
+                <h1>Случайный поиск Наставника.</h1>
+                <h2>Как это?</h2>
+                <p>Вы просто выбираете нужную вам игру, а система определяет вам тренера. Вы в праве выбрать только навык тренера и ваш. После подбора вам откроет окно записи на занятия. Вы сможете просмотреть информацию о вашем тренере перед записью.</p>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4 bg-dark-orange">
+                <h2>Почему случайный? Я хочу к конкретному!</h2>
+                <p>Вы можете выбрать конкретного наставника после регистрации на сайте. Мы сделали так для демонстрации работы системы и равномерного распределения записей.Так вам будет проще найти своего первого тренера! Просто попробуйте для начала такой формат.</p>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+
+                <a href="coach.html" class="btn btn-primary text-center">
+                    <h2>Искать определённого наставника</h2>
+                </a>
+            </div>
+        </div>
+        <div class="row">
+            <div class=" col-sm-12 col-md-6 col-lg-4"><span>{{CollbackByReg}}</span></div>
+        </div>
+        <div class="row">
+            <div class="card-group">
+                <div class="col-sm-12 col-md-12 col-lg-4">
+                    <div class="card bg-primary">
+
+                        <div class="form-group w-75">
+
+
+                            <label for="inputState" class="ml-3">Ваша игра</label>
+                            <select id="inputState" class="form-control ml-3">
+                                <option selected>Выбирайте...</option>
+                                <option>World of Warcraft</option>
+                                <option>Overwatch</option>
+                                <option>StarCraft 2</option>
+                                <option>Dota 2</option>
+                                <option>Valorant</option>
+                                <option>Hearthstone</option>
+                            </select>
+                            <label for="inputState2" class="ml-3">Уровень тренера</label>
+                            <select id="inputState2" class="form-control ml-3">
+                                <option selected>Выбирайте...</option>
+                                <option>Новичок</option>
+                                <option>1 звезда</option>
+                                <option>2 звезды</option>
+                                <option>3 звезды</option>
+                                <option>4 звезды</option>
+                                <option>5 звезд</option>
+                            </select>
+                            <label for="inputState3" class="ml-3">Ваш навык</label>
+                            <select id="inputState3" class="form-control ml-3">
+                                <option selected>Выбирайте...</option>
+                                <option>Никогда не играл</option>
+                                <option>Только начал</option>
+                                <option>Освоил основы</option>
+                                <option>Средний игрок</option>
+                                <option>Лезу в топ</option>
+                                <option>Я про! Просто посмотреть</option>
+                            </select>
+                            <label for="inputState4" class="ml-3">Направление</label>
+                            <select id="inputState4" class="ml-3 form-control w-100">
+                                <option selected>Выбирайте...</option>
+                                <option>Искать по любым направлениям</option>
+                                <option>Выбрать все направления</option>
+                                <option>PvE и PvP</option>
+                                <option>Экономика</option>
+                                <option>PvP</option>
+                                <option>PvE</option>
+                            </select>
+                           
+                        </div>
+                        <a {{randomFindStart}}} class="btn btn-warning text-center">
+                            <h2>Искать случайного наставника</h2>
+                        </a>
+                    </div>
+                </div>
+                <!--/div -->
+                <div class="col-sm-12 col-md-6 col-lg-4 mt-1">
+                    <div class="card bg-primary text-white " style="display: inline-block">
+
+                        <div class="card-body text-center">
+                            <h4 class="card-title">{{firstName}} {{nickName}} {{lastName}}</h4>
+                            <p class="card-text">{{infoCoach}}</p>
+                            <p class="card-cost">{{costCoach}}</p><!-- Цена кауча -->
+                            <div>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                            </div>
+                            <a {{regToCoach}}} class="btn btn-warning">
+                                <h3>Регистрация</h3>
+                            </a>
+                            <a {{profileToCoach}}} class="btn btn-warning">
+                                <h3>Профиль ></h3>
+                            </a>
+
+                        </div>
+                        <img class="card-img-bottom" src="{% static 'img/test-coach-img.jpg' %}" {{cardImgAlt}}>
+                    </div> <!-- Конец карты!-->
+                </div> <!-- Колонка-->
+                <div class="col-sm-12 col-md-6 col-lg-4 mt-1">
+                    <div class="card bg-primary text-white " style="display: inline-block">
+                        <div class="card-body text-center">
+                            <h4 class="card-title">{{firstName}} {{nickName}} {{lastName}}</h4>
+                            <p class="card-text">{{infoCoach}}</p>
+                            <p class="card-cost">{{costCoach}}</p><!-- Цена кауча -->
+                            <div>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                            </div>
+                            <a {{regToCoach}}} class="btn btn-warning">
+                                <h3>Регистрация</h3>
+                            </a>
+                            <a {{profileToCoach}}} class="btn btn-warning">
+                                <h3>Профиль ></h3>
+                            </a>
+
+                        </div>
+                        <img class="card-img-bottom" src="{% static 'img/test-coach-img.jpg' %}" {{cardImgAlt}}>
+                    </div> <!-- Конец карты!-->
+                </div><!-- Колонка-->
+            </div><!-- Блок с карточками-->
+            <!-- test-->
+
+
+            <!--TEST -->
+
+            <!-- Test <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="card bg-primary">
+                        <a {{randomFindStart}}} class="btn btn-primary text-center">
+                            <h2>Искать случайного наставника</h2>
+                        </a>
+                    </div>
+                </div>-->
+
+        </div>
+
+    </main>
+    
+{% endblock %}

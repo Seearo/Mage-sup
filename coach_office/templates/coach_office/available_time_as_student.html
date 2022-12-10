@@ -1,0 +1,55 @@
+{% extends "account/baseprofile.html" %}
+{% load static %}
+{% block content %}
+
+    <main class="bg-gold">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                    {% if user.profile.nickname %}
+                    <h1 class="text-center">Доступное время Наставника {{ user.first_name }} {{ user.profile.nickname }} {{ user.last_name }}</h1>
+                    {% else %}
+                    <h1 class="text-center">Доступное время Наставника {{ user.first_name }} {{ user.username }} {{ user.last_name }}</h1>
+                    {% endif %}
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <h2>Меню профиля</h2>
+                {% if user.is_superuser %}
+                <a href="../../superuser/" class="nav-link">Админ</a>
+                {% endif %}
+                <a href="../account/profile.html/user_id{{ user.id }}" class="nav-link">Профиль</a>
+                {% if new_diary > 0 %}
+                    <a href="../account/diary.html" class="nav-link">Дневник ({{ new_diary }})</a>
+                {% else %}
+                    <a href="../account/diary.html" class="nav-link">Дневник</a>
+                {% endif %}
+                <a href="../account/bookmarks.html" class="nav-link">Закладки</a>
+                {% if user.profile.is_coach %}
+                <a href="user_id{{ user.id }}" class="nav-link">Наставник</a>
+                {% endif %}
+                <a href="../account/timetable.html" class="nav-link">Расписание</a>
+                {% if new_messages > 0 %}
+                    <a href="../account/message.html" class="nav-link">Сообщения ({{ new_messages }})</a>
+                {% else %}
+                    <a href="../account/message.html" class="nav-link">Сообщения</a>
+                {% endif %}
+                <a href="../account/friends.html" class="nav-link">Друзья</a>
+                <a href="../account/blacklist.html" class="nav-link">Чёрный список</a>
+                <a href="../account/account.html" class="nav-link">Настройки</a>
+
+            </div>
+       <div class="col-sm-12 col-md-8 col-lg-8">
+                <p>Доступные даты со временем на ближайшие дни ({{ period }}):</p>
+                {% for year, month, day, hour, minute in available_datetimes %}
+                    <p>{{ day }}.{{ month }}.{{ year }} {{ hour }}:{{ minute }} МСК</p>
+                {% endfor %}
+
+
+
+        </div>
+
+
+
+    </main>
+
+
+{% endblock %}

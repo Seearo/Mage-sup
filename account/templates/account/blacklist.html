@@ -1,0 +1,109 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% block content %}
+
+    <main class="bg-gold">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <h1 class="text-center">Чёрный список</h1>
+            </div>
+            <div class="col-sm-12 col-md-4  col-lg-4">
+                <h2>Меню профиля</h2>
+                {% if user.is_superuser %}
+                <a href="../../superuser/" class="nav-link">Админ</a>
+                {% endif %}
+                <a href="profile.html/user_id{{ user.id }}" class="nav-link">Профиль</a>
+                {% if new_diary > 0 %}
+                    <a href="diary.html" class="nav-link">Дневник ({{ new_diary }})</a>
+                {% else %}
+                    <a href="diary.html" class="nav-link">Дневник</a>
+                {% endif %}
+                <a href="bookmarks.html" class="nav-link">Закладки</a>
+                {% if user.profile.is_coach %}
+                <a href="../coach_office/user_id{{ user.id }}" class="nav-link">Наставник</a>
+                {% endif %}
+                <a href="timetable.html" class="nav-link">Расписание</a>
+                {% if new_messages > 0 %}
+                    <a href="message.html" class="nav-link">Сообщения ({{ new_messages }})</a>
+                {% else %}
+                    <a href="message.html" class="nav-link">Сообщения</a>
+                {% endif %}
+                <a href="friends.html" class="nav-link">Друзья</a>
+                <a href="blacklist.html" class="nav-link active btn-success">Чёрный список</a>
+                <a href="account.html" class="nav-link">Настройки</a>
+
+            </div>
+            <div class="col-sm-12 col-md-8 col-lg-8">
+                <p>С людьми в чёрном списке нельзя обмениваться сообщениями, записываться в друзья и закладки, на урок</p>
+                {% for person in blacklist %}
+                <div class="container">
+                    <img src="{{ person.profile.photo.url }}" alt="" style="width:90px">
+                    {% if person.profile.nickname %}
+                    <p><span>{{ person.first_name }} {{ person.profile.nickname }} {{ person.last_name }}</span>
+                    {% else %}
+                    <p><span>{{ person.first_name }} {{ person.username }} {{ person.last_name }}</span>
+                    {% endif %}
+                    {% if person.profile.coach %}
+                        <span> Наставник</span>
+                    {% endif %}
+                    {% if person.is_superuser %}
+                        <span> Администратор</span>
+                    {% endif %}
+                    </p>
+                    {% if person.profile.coach %}
+                        <div>
+                            {% for star in person.coach_profile.star_level.name %}
+                                {% if star == "★" %}
+                                    <span class="fa fa-star checked"></span>
+                                {% else %}
+                                    <span class="fa fa-star"></span>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    <div class="btn-group dropup">
+                        <button class="btn btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            ...
+                        </button>
+                        <div class="dropdown-menu dropup">
+                            <a class="dropdown-item" id="dark-orange" href="/account/profile.html/user_id{{ person.id }}">Просмотреть профиль</a>
+                            <div class="dropdown-divider"></div>
+                                <form id="form1_{{ person.id }}" method="post" action="/account/remove_from_blacklist/watched_user_id{{ person.id }}/next=/account/profile.html/user_id{{ person.id }}" >
+                                    {% csrf_token %}
+                                </form>
+                                <a class="dropdown-item" id="dark-orange" href="#" onclick="document.getElementById('form1_{{ person.id }}').submit();">Удалить из чёрного списка</a>
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p>В чёрном списке пока никого нет.</p>
+                {% endfor %}
+
+            {% if blacklist %}
+            <div class="pagination col-sm-12 col-md-6 col-lg-4">
+                <span class="step-links">
+                    {% if blacklist.has_previous %}
+                        <a href="blacklist1.html">&laquo; Первая</a>
+                        <a href="blacklist{{ blacklist.previous_page_number }}.html">Назад</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Страница {{ blacklist.number }} из {{ blacklist.paginator.num_pages }}
+                    </span>
+
+                    {% if blacklist.has_next %}
+                        <a href="blacklist{{ blacklist.next_page_number }}.html">Далее</a>
+                        <a href="blacklist{{ blacklist.paginator.num_pages }}.html">Последняя &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+            {% endif %}
+
+            </div>
+
+
+
+        </div>
+    </main>
+
+{% endblock %}

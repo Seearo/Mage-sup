@@ -1,0 +1,137 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% block content %}
+
+    <main class="bg-gold">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                    {% if coach.profile.nickname %}
+                    <h1 class="text-center">Запись на урок к Наставнику {{ coach.first_name }} {{ coach.profile.nickname }} {{ coach.last_name }}</h1>
+                    {% else %}
+                    <h1 class="text-center">Запись на урок к Наставнику {{ coach.first_name }} {{ coach.username }} {{ coach.last_name }}</h1>
+                    {% endif %}
+            </div>
+           <div class="col-sm-12 col-md-4  col-lg-4">
+               <h2>Меню профиля</h2>
+                {% if user.is_superuser %}
+                <a href="../../superuser/" class="nav-link">Админ</a>
+                {% endif %}
+                <a href="profile.html/user_id{{ user.id }}" class="nav-link">Профиль</a>
+                {% if new_diary > 0 %}
+                    <a href="diary.html" class="nav-link">Дневник ({{ new_diary }})</a>
+                {% else %}
+                    <a href="diary.html" class="nav-link">Дневник</a>
+                {% endif %}
+                <a href="bookmarks.html" class="nav-link">Закладки</a>
+                {% if user.profile.is_coach %}
+                <a href="../coach_office/user_id{{ user.id }}" class="nav-link">Наставник</a>
+                {% endif %}
+                <a href="timetable.html" class="nav-link">Расписание</a>
+                {% if new_messages > 0 %}
+                    <a href="message.html" class="nav-link">Сообщения ({{ new_messages }})</a>
+                {% else %}
+                    <a href="message.html" class="nav-link">Сообщения</a>
+                {% endif %}
+                <a href="friends.html" class="nav-link">Друзья</a>
+                <a href="blacklist.html" class="nav-link">Чёрный список</a>
+                <a href="account.html" class="nav-link">Настройки</a>
+
+                <form method="post" class="form-group" action="../account/registration_sorting_coach_id{{ coach.id }}">
+                    {% csrf_token %}
+                    <label class="w-100">Показать
+                    {{ registration_sorting_form.reg_sorting }}
+                    </label>
+                    <button type="submit" class="btn btn-primary">Применить</button>
+                </form>
+            </div>
+            <div class="col-sm-12 col-md-8 col-lg-8">
+            {% if coach.coach_profile.strengths %}
+                <p>{{ coach.coach_profile.strengths }}</p>
+            {% endif %}
+            {% if reg_sorting != 2 %}
+                {% if available_datetimes and not cap_reached%}
+                    <p>Выберите подходящие дату и время на ближайшие дни ({{ period }}):</p>
+                    <form  method="post" action="../account/register_one_day_coach_id{{ coach.id }}" >
+                        {% csrf_token %}
+                        <p>{{ registration_form.datetime }}</p>
+                        <p>Игра     ______ Направление ___  Регион</p>
+                        {{ registration_form.game }}
+                        {{ registration_form.direction }}
+                        {{ registration_form.region }}
+                        <p>Email {{ registration_form.email }}</p>
+                        <p>Телефонный номер {{ registration_form.phone_number }}</p>
+                        <p>Контактная информация видна только Наставнику и модераторам {{ registration_form.contacts }}</p>
+                        <button type="submit" class="btn btn-primary">Записаться</button>
+                    </form>
+                {% elif coach in user.profile.blacklist.all %}
+                    <p>Вы не можете записаться к этому Наставнику, поскольку он находится в Вашем чёрном списке</p>
+                {% elif user in coach.profile.blacklist.all %}
+                    <p>Вы не можете записаться к этому Наставнику, поскольку находитесь в его чёрном списке</p>
+                {% elif cap_reached %}
+                    <p>Достигнуто максимальное допустимое число записей на предстоящие занятия ({{ cap }})</p>
+                {% else %}
+                    <p>Нет доступного времени для записи к этому Наставнику на ближайшие дни ({{ period }})</p>
+                {% endif %}
+            {% endif %}
+
+            {% if registrations %}
+                {% if coach.coach_profile.contacts %}
+                    <p>Контактные данные Наставника:</p>
+                    <p>{{ coach.coach_profile.contacts }}</p>
+                {% endif %}
+                <p>Вы записаны к этому Наставнику на следующее время:</p>
+                {% for registration in registrations %}
+                    <div class="container">
+                        <p>{{ registration.date }} {{ registration.time }} МСК</p>
+                        {% if registration.gamedirection %}
+                            {% if registration.gamedirection.game != "account.Game.None" %}
+                                <p>Игра: {{ registration.gamedirection.game }}</p>
+                            {% endif %}
+                            {% if registration.gamedirection.direction != "account.Direction.None" %}
+                                <p>Направление: {{ registration.gamedirection.direction }}</p>
+                            {% endif %}
+                            {% if registration.gamedirection.region != "account.Region.None" %}
+                                <p>Регион: {{ registration.gamedirection.region }}</p>
+                            {% endif %}
+                        {% endif %}
+                        <form  method="post" action="../account/unregister_registration_id{{ registration.id }}_next_{{ request.get_full_path }}" >
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">Отписаться</button>
+                        </form>
+                        <br/>
+                    </div>
+                {% endfor %}
+            {% endif %}
+            {% if reg_sorting == 2 %}
+                {% if available_datetimes and not cap_reached%}
+                    <p>Выберите подходящие дату и время на ближайшие дни ({{ period }}):</p>
+                    {% for year, month, day, hour, minute in available_datetimes %}
+                        <div class="container">
+                            <p>{{ day }}.{{ month }}.{{ year }} {{ hour }}:{{ minute }} МСК</p>
+                            <form  method="post" action="../account/register_coach_id{{ coach.id }}_datetime_{{ year }}_{{ month }}_{{ day }}_{{ hour }}_{{ minute }}" >
+                                {% csrf_token %}
+                                <p>Игра     ______ Направление ___  Регион</p>
+                                <!--<p><pre class='p'>Игра                 Направление           Регион</pre></p>-->
+                                {{ registration_game_form.game }}
+                                {{ registration_game_form.direction }}
+                                {{ registration_game_form.region }}
+                                <button type="submit" class="btn btn-primary">Записаться</button>
+                            </form>
+                        </div>
+                    {% endfor %}
+                {% elif coach in user.profile.blacklist.all %}
+                    <p>Вы не можете записаться к этому Наставнику, поскольку он находится в Вашем чёрном списке</p>
+                {% elif user in coach.profile.blacklist.all %}
+                    <p>Вы не можете записаться к этому Наставнику, поскольку находитесь в его чёрном списке</p>
+                {% elif cap_reached %}
+                    <p>Достигнуто максимальное допустимое число записей на предстоящие занятия ({{ cap }})</p>
+                {% else %}
+                    <p>Нет доступного времени для записи к этому Наставнику на ближайшие дни ({{ period }})</p>
+                {% endif %}
+            {% endif %}
+            </div>
+
+        </div>
+    </main>
+
+{% endblock %}

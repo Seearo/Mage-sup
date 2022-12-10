@@ -1,0 +1,74 @@
+{% extends "account/base.html" %}
+{% load static %}
+
+{% block bodyclass %}
+<body class="">
+{% endblock %}
+
+{% block content %}
+
+    <main class="bg-dark text-dark">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <h1 class="text-center">Достижения</h1>
+            </div>
+            <div class="col-sm12 col-md-3 col-lg-4">
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-toggle="tab" href="#all">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#menu1">Menu 1</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-toggle="tab" href="#menu2">Menu 2</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- Tab panes -->
+            <div class="tab-content col-sm-12 col-md-9 col-lg-8" style="word-wrap:break-word; word-spacing: normal;line-height: 1; ">
+                <div class="tab-pane container active" id="all">
+                    <h2>Все достижения</h2>
+                    <div class="d-block bg-success row p-3 m-1">
+                        <h2>10 последователей</h2>
+                        <p>Заведите 10 постоянных учеников</p>
+                        <p>20 очков</p>
+                    </div>
+                    <div class="d-block bg-success row p-3 m-1">
+                        <h2>Первый звонок!</h2>
+                        <p>Пройдите первый урок</p>
+                        <p>10 очков</p>
+                    </div>
+                    <div class="d-block bg-danger row p-3 m-1">
+                        <h2>Десять как один</h2>
+                        <p>10 уроков</p>
+                        <p>10 очков</p>
+                    </div>
+                </div>
+                <div class="tab-pane container fade" id="menu1">
+                    <h2>Достижения ученика</h2>
+                    <div class="d-block bg-success row p-3 m-1">
+                        <h2>Первый звонок!</h2>
+                        <p>Пройдите первый урок</p>
+                        <p>10 очков</p>
+                    </div>
+                    <div class="d-block bg-danger row p-3 m-1">
+                        <h2>Десять как один</h2>
+                        <p>10 уроков</p>
+                        <p>10 очков</p>
+                    </div>
+                </div>
+                <div class="tab-pane container fade" id="menu2">
+                    <h2>Достижения наставника</h2>
+                    <div class="d-block bg-success row p-3 m-1">
+                        <h2>10 последователей</h2>
+                        <p>Заведите 10 постоянных учеников</p>
+                        <p>20 очков</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

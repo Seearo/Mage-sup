@@ -1,0 +1,129 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% block content %}
+
+    <main class="bg-gold">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <h1 class="text-center">Друзья</h1>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <h2>Меню профиля</h2>
+                {% if user.is_superuser %}
+                <a href="../../superuser/" class="nav-link">Админ</a>
+                {% endif %}
+                <a href="profile.html/user_id{{ user.id }}" class="nav-link">Профиль</a>
+                {% if new_diary > 0 %}
+                    <a href="diary.html" class="nav-link">Дневник ({{ new_diary }})</a>
+                {% else %}
+                    <a href="diary.html" class="nav-link">Дневник</a>
+                {% endif %}
+                <a href="bookmarks.html" class="nav-link">Закладки</a>
+                {% if user.profile.is_coach %}
+                <a href="../coach_office/user_id{{ user.id }}" class="nav-link">Наставник</a>
+                {% endif %}
+                <a href="timetable.html" class="nav-link">Расписание</a>
+                {% if new_messages > 0 %}
+                    <a href="message.html" class="nav-link">Сообщения ({{ new_messages }})</a>
+                {% else %}
+                    <a href="message.html" class="nav-link">Сообщения</a>
+                {% endif %}
+                <a href="friends.html" class="nav-link active btn-success">Друзья</a>
+                <a href="blacklist.html" class="nav-link">Чёрный список</a>
+                <a href="account.html" class="nav-link">Настройки</a>
+
+            </div>
+       <div class="col-sm-12 col-md-8 col-lg-8">
+
+                <div class="container">
+                    <img src="{{ friendship.friend.photo.url }}" alt="" style="width:90px">
+
+                    <p>
+                    {% if friendship.friend.nickname %}
+                    <span>{{ friendship.friend.user.first_name }} {{ friendship.friend.nickname }} {{ friendship.friend.user.last_name }}</span>
+                    {% else %}
+                    <span>{{ friendship.friend.user.first_name }} {{ friendship.friend.user.username }} {{ friendship.friend.user.last_name }}</span>
+                    {% endif %}
+                    {% if friendship.friend.coach %}
+                    <span> Наставник</span>
+                    {% endif %}
+                    {% if friendship.friend.user.is_superuser %}
+                        <span> Администратор</span>
+                    {% endif %}
+                    {% if friendship.status == 0 %}
+                    <span> Заявка на рассмотрении </span>
+                    {% elif friendship.status == 1 %}
+                    <span> Взаимный друг </span>
+                    {% elif friendship.status == 3 %}
+                    <span> Получена заявка в друзья </span>
+                    {% endif %}
+                    </p>
+
+                    {% if friendship.friend.coach %}
+                    <div>
+                        {% for star in friendship.friend.user.coach_profile.star_level.name %}
+                            {% if star == "★" %}
+                                <span class="fa fa-star checked"></span>
+                            {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <p>{{ friendship.comment }}</p>
+
+                    <!--<div class="mt-3">
+                        <span class="fa fa-vk"></span>
+                        <span class="fa fa-youtube"></span>
+                        <span class="fa fa-telegram"></span>
+                        <span class="fa fa-twitch"></span>
+                        <span class="fa fa-instagram"></span>
+                    </div>-->
+
+                    <div class="btn-group dropup">
+                        <button class="btn btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            ...
+                        </button>
+                        <div class="dropdown-menu dropup">
+
+                            <a class="dropdown-item" id="dark-orange" href="/account/profile.html/user_id{{ friendship.friend.user.id }}">Просмотреть профиль</a>
+                            <a class="dropdown-item" id="dark-orange" href="/account/message_writing{{ friendship.friend.user.id }}_page1.html">Написать сообщение</a>
+                            <div class="dropdown-divider"></div>
+                            {% if friendship.status != 3 %}
+                                <a class="dropdown-item" id="dark-orange" href="/account/remove_from_friends/watched_user_id{{ friendship.friend.user.id }}/next={{ request.get_full_path }}">Удалить из друзей</a>
+                            {% else %}
+                                <a class="dropdown-item" id="dark-orange" href="/account/receive_to_friends/watched_user_id{{ friendship.friend.user.id }}/next={{ request.get_full_path }}">Принять заявку</a>
+                                <a class="dropdown-item" id="dark-orange" href="/account/reject_from_friends/watched_user_id{{ friendship.friend.user.id }}/next={{ request.get_full_path }}">Отклонить заявку</a>
+                            {% endif %}
+                            <form  id="form1_{{ friendship.friend.user.id }}" method="post" action="/account/add_to_blacklist/watched_user_id{{ friendship.friend.user.id }}/next=/account/profile.html/user_id{{ friendship.friend.user.id }}" >
+                                {% csrf_token %}
+                            </form>
+                            <a class="dropdown-item" id="dark-orange" href="#" onclick="document.getElementById('form1_{{ friendship.friend.user.id }}').submit();">В чёрный список</a>
+
+                        </div>
+                    </div>
+                </div>
+
+                <form method="post" class="form-group" action="../account/friends_commenting_friend_id={{ friendship.friend.user.id }}_next={{ request.get_full_path }}">
+                    {% csrf_token %}
+                    <p>Напишите комментарий:</p>
+                    {{ friends_commenting_form.comment }}
+                    <button type="submit" class="btn btn-primary">Применить</button>
+                </form>
+
+                <form method="post" class="form-group" action="../account/friends_clear_comment_friend_id={{ friendship.friend.user.id }}_next={{ request.get_full_path }}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Очистить комментарий</button>
+                </form>
+
+
+            </div>
+        </div>
+
+
+
+    </main>
+
+
+{% endblock %}

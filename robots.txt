@@ -1,0 +1,7 @@
+User-agent: Yandex
+Disallow: /platform-standards.html
+
+User-agent: Googlebot
+Allow: *.css
+Allow: *.js
+Disallow: /platform-standards.html

@@ -1,0 +1,186 @@
+{% extends "coach_office/baseprofile.html" %}
+{% load static %}
+{% block content %}
+
+    <main class="bg-gold">
+        <form method="post" action="../coach_office/settings">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <h1 class="text-center">Аккаунт Наставника</h1>
+                <p>Перед использованием функционала наставника примите <a href="../../coach-standards.html">Правила и стандарты Наставника {{ trademark }}</a></p>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <h2>Меню профиля</h2>
+                {% if user.is_superuser %}
+                <a href="../../superuser/" class="nav-link">Админ</a>
+                {% endif %}
+                <a href="../../account/profile.html/user_id{{ user.id }}" class="nav-link">Профиль</a>
+                {% if new_diary > 0 %}
+                    <a href="../../account/diary.html" class="nav-link">Дневник ({{ new_diary }})</a>
+                {% else %}
+                    <a href="../../account/diary.html" class="nav-link">Дневник</a>
+                {% endif %}
+                <a href="../../account/bookmarks.html" class="nav-link">Закладки</a>
+                <a href="../coach_office/user_id{{ user.id }}" class="nav-link active btn-success">Наставник</a>
+                <a href="../../account/timetable.html" class="nav-link">Расписание</a>
+                {% if new_messages > 0 %}
+                    <a href="../../account/message.html" class="nav-link">Сообщения ({{ new_messages }})</a>
+                {% else %}
+                    <a href="../../account/message.html" class="nav-link">Сообщения</a>
+                {% endif %}
+                <a href="../../account/friends.html" class="nav-link">Друзья</a>
+                <a href="../../account/blacklist.html" class="nav-link">Чёрный список</a>
+                <a href="../../account/account.html" class="nav-link">Настройки</a>
+
+                <div>
+                    <a href="#" class="btn btn-primary">
+                        <p>Просмотреть страницу как гость!</p>
+                    </a>
+
+                </div>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+
+                <div class="form-group w-75">
+                    <label for="inputState" class="ml-3">Ваши игры как Наставника. До 3х штук и ваши направление и регион в них</label>
+                    <div>
+                    <p class="ml-3">1 игра</p>
+                    <p>{{ settings_form.game1 }}</p>
+                    <p>{{ settings_form.direction1 }}</p>
+                    <p>{{ settings_form.region1 }}</p>
+                    </div>
+                    <div>
+                    <p class="ml-3">2 игра</p>
+                    <p>{{ settings_form.game2 }}</p>
+                    <p>{{ settings_form.direction2 }}</p>
+                    <p>{{ settings_form.region2 }}</p>
+                    </div>
+                    <div>
+                    <p class="ml-3">3 игра</p>
+                    <p>{{ settings_form.game3 }}</p>
+                    <p>{{ settings_form.direction3 }}</p>
+                    <p>{{ settings_form.region3 }}</p>
+                    </div>
+
+                    <label for="starLvl" class="col-sm-2 col-form-label">Уровень звёзд</label>
+                    <div class="col-sm-10">
+                        <input type="text" readonly class="form-control-plaintext" id="starLvl" value={{ user.coach_profile.star_level.name }}>
+                    </div>
+
+                    <label for="Lvl" class="col-sm-2 col-form-label">Уровень пользователя</label>
+                    <div class="col-sm-10">
+                        <input type="text" readonly class="form-control-plaintext" id="Lvl" value={{ user.profile.level }}>
+                    </div>
+                    <label for="expLvl" class="col-sm-2 col-form-label">Опыта получено</label>
+                    <div class="col-sm-10">
+                        <input type="text" readonly class="form-control-plaintext" id="expLvl" value="{{ user.profile.experience }}/{{ level_up }}">
+                    </div>
+                </div>
+
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: {{ value_now }}%" aria-valuenow="{{ value_now }}" aria-valuemin="0" aria-valuemax="100"></div>
+
+                </div>
+
+                <div class="form-check">
+                    {% if user.coach_profile.nickname_flag %}
+                    {{ settings_form.nickname_flag_checked }}
+                    {% else %}
+                    {{ settings_form.nickname_flag_not_checked }}
+                    {% endif %}
+                    <label class="form-check-label" for="exampleCheck1">Показывать только мой Никнейм (в Наставниках)</label>
+                </div>
+                <div class="form-check">
+                    {% if user.coach_profile.search_flag %}
+                    {{ settings_form.search_flag_checked }}
+                    {% else %}
+                    {{ settings_form.search_flag_not_checked }}
+                    {% endif %}
+                    <label class="form-check-label" for="exampleCheck2">Показывать мою страницу в случайном поиске</label>
+                </div>
+                <div class="form-check">
+                    {% if user.coach_profile.inactive_flag %}
+                    {{ settings_form.inactive_flag_checked }}
+                    {% else %}
+                    {{ settings_form.inactive_flag_not_checked }}
+                    {% endif %}
+                    <label class="form-check-label" for="exampleCheck3">Отключить аккаунт Наставника и снять все записи!</label>
+                </div>
+                <label for="inputSex" class="ml-3 mt-3">Кого показывать на фото</label>
+                {{ settings_form.which_photo }}
+
+                </select>
+
+
+
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <div class="form-group">
+                    <p>Ваше описание для карточек в поиске</p>
+                    {{ settings_form.description }}
+                </div>
+                <div class="form-group">
+                    <p>Ваши сильные стороны/программа</p>
+                    {{ settings_form.strengths }}
+                </div>
+                <div class="form-group">
+                    <p>Контактные данные для игр, они видны только модераторам и ученикам</p>
+                    <!--<textarea class="form-control" id="exampleFormControlTextarea1" rows="10" placeholder="Ваши контактные данные видны только модераторам и ученикам"></textarea>-->
+                    {{ settings_form.contacts }}
+                    <!-- <label for="inputState" class="ml-3">Кнопка на ваш игровой профиль</label>
+                    </br>
+                    {{ settings_form.show_button }}
+                    </br>
+                    {{ settings_form.game_accounts }}
+                    </select>-->
+                </div>
+
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-4 offset-lg-4">
+
+                <button type="submit" class="btn btn-primary mt-3">Сохранить</button>
+                <!--<a href="#" class="btn btn-primary">-->
+                   <!-- Премиум наставник сможет влиять на данные аккаунта. Менять кейвордс, дискриптион, тайтл своего профиля наставника и возможно заменять URL (адрес профиля) на никнейм. Например: gtl.com/coach/happyzerg вместо gtl.com/coach/Qw1ar-tb56i . Рассмотрю также и другой функционал на твой вкус -->
+                    <!--<p>Аккаунт премиум наставника!</p>
+                </a>-->
+                <a class="btn btn-success m-2 ml-3 w-75">
+                    <p>Настрой расписание!</p>
+                </a>
+
+            </div>
+        </div>
+        </form>
+        <div class="w-100 row"></div>
+        <div class=" col-sm-12 col-md-6 col-lg-4">
+            <div class="">
+                <h2>Достижения: <span class="points">10</span> очков</h2>
+                <div class="w-100 bg-danger">
+                    <p>Первый пользователь</p>
+                    <h3>10 очков</h3>
+                </div>
+                {{achiveLast}}
+                {{achiveLast}}
+                {{achiveLast}}
+            </div>
+        </div>
+        <div class="chat-with-coach">
+            <button data-toggle="collapse" data-target="#demo" class="btn btn-primary">У вас сообщение!</button>
+            <div id="demo" class="collapse bg-primary">
+                <h1 class="text-center">Чат</h1>
+                <div class="coach-m">
+                    <p>Привет! До урока 10 минут!</p>
+                </div>
+                <div class="to-coach-m">
+                    <p>Ок! Вот мой ник! VasyaPro</p>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% block content %}
+
+    <main class="bg-gold">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <h1 class="text-center">Настройки</h1>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <h2>Меню профиля</h2>
+                {% if user.is_superuser %}
+                <a href="../../superuser/" class="nav-link">Админ</a>
+                {% endif %}
+                <a href="profile.html/user_id{{ user.id }}" class="nav-link">Профиль</a>
+                {% if new_diary > 0 %}
+                    <a href="diary.html" class="nav-link">Дневник ({{ new_diary }})</a>
+                {% else %}
+                    <a href="diary.html" class="nav-link">Дневник</a>
+                {% endif %}
+                <a href="bookmarks.html" class="nav-link">Закладки</a>
+                {% if user.profile.is_coach %}
+                <a href="../coach_office/user_id{{ user.id }}" class="nav-link">Наставник</a>
+                {% endif %}
+                <a href="timetable.html" class="nav-link">Расписание</a>
+                {% if new_messages > 0 %}
+                    <a href="message.html" class="nav-link">Сообщения ({{ new_messages }})</a>
+                {% else %}
+                    <a href="message.html" class="nav-link">Сообщения</a>
+                {% endif %}
+                <a href="friends.html" class="nav-link">Друзья</a>
+                <a href="blacklist.html" class="nav-link">Чёрный список</a>
+                <a href="account.html" class="nav-link active btn-success">Настройки</a>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <form method="post" action="../account/settings" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="card-columns">
+                    <div class="card">
+                        <img class="card-img-top" src={{ photo }} alt=''>
+                        <label class="">Фотография
+                        {{ settings_form.photo }}
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Имя: {{ settings_form.first_name }}  </label>
+                    <label>Фамилия: {{ settings_form.last_name }}</label>
+                    <label>Никнейм: {{ settings_form.nickname }}
+                    </label>
+
+                    <label class="w-100">Ваша игра как студента
+                    {{ settings_form.game }}
+                    </label>
+                    <label for="inputState" class="">Направление
+                    {{ settings_form.direction }}
+                    </label>
+                    <br/>
+                    <label class="">Регион
+                    {{ settings_form.region }}
+                    </label>
+                    <br/>
+                    <label for="exampleFormControlTextarea1">Контактную информацию для игр в качестве студента, емейл и телефонный номер видят только Наставники перед уроком и модераторы</label>
+                    {{ settings_form.contacts }}
+                    <label class="">Email
+                    {{ settings_form.email }}
+                    </label>
+                    <label class="">Телефонный номер
+                    {{ settings_form.phone_number }}
+                    </label>
+
+                </div>
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+                </form>
+            </div>
+        </div>
+        {% if not user.profile.coach %}
+        <div class="row">
+            <div class="offset-lg-4 col-sm-12 col-md-6 col-lg-4">
+                <form method="post" action="../account/wants_to_coach">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Стать Наставником!</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+        <div class="chat-with-coach">
+            <button data-toggle="collapse" data-target="#demo" class="btn btn-primary">У вас сообщение!</button>
+            <div id="demo" class="collapse bg-primary">
+                <h1 class="text-center">Чат</h1>
+                <div class="coach-m">
+                    <p>Привет! До урока 10 минут!</p>
+                </div>
+                <div class="to-coach-m">
+                    <p>Ок! Вот мой ник! VasyaPro</p>
+                </div>
+            </div>
+        </div>
+
+
+    </main>
+
+{% endblock %}

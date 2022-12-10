@@ -1,0 +1,178 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% block content %}
+
+    <main class="bg-gold">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <h1 class="text-center">Сообщения</h1>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <h2>Меню профиля</h2>
+                {% if user.is_superuser %}
+                <a href="../../superuser/" class="nav-link">Админ</a>
+                {% endif %}
+                <a href="profile.html/user_id{{ user.id }}" class="nav-link">Профиль</a>
+                {% if new_diary > 0 %}
+                    <a href="diary.html" class="nav-link">Дневник ({{ new_diary }})</a>
+                {% else %}
+                    <a href="diary.html" class="nav-link">Дневник</a>
+                {% endif %}
+                <a href="bookmarks.html" class="nav-link">Закладки</a>
+                {% if user.profile.is_coach %}
+                <a href="../coach_office/user_id{{ user.id }}" class="nav-link">Наставник</a>
+                {% endif %}
+                <a href="timetable.html" class="nav-link">Расписание</a>
+                {% if new_messages > 0 %}
+                    <a href="message.html" class="nav-link">Сообщения ({{ new_messages }})</a>
+                {% else %}
+                    <a href="message.html" class="nav-link">Сообщения</a>
+                {% endif %}
+                <a href="friends.html" class="nav-link active btn-success">Друзья</a>
+                <a href="blacklist.html" class="nav-link">Чёрный список</a>
+                <a href="account.html" class="nav-link">Настройки</a>
+
+            </div>
+       <div class="col-sm-12 col-md-8 col-lg-8">
+
+                <div class="container">
+                    <img src="{{ recipient.photo.url }}" alt="" style="width:90px">
+
+                    <p>
+                    {% if recipient.nickname %}
+                    <span>{{ recipient.user.first_name }} {{ recipient.nickname }} {{ recipient.user.last_name }}</span>
+                    {% else %}
+                    <span>{{ recipient.user.first_name }} {{ recipient.user.username }} {{ recipient.user.last_name }}</span>
+                    {% endif %}
+                    {% if recipient.coach %}
+                    <span> Наставник</span>
+                    {% endif %}
+                    {% if friendship %}
+                        {% if friendship.status == 0 %}
+                        <span> Заявка на рассмотрении </span>
+                        {% elif friendship.status == 1 %}
+                        <span> Взаимный друг </span>
+                        {% elif friendship.status == 3 %}
+                        <span> Получена заявка в друзья </span>
+                        {% endif %}
+                    {% endif %}
+                    </p>
+
+                    {% if recipient.coach %}
+                    <div>
+                        {% for star in recipient.user.coach_profile.star_level.name %}
+                            {% if star == "★" %}
+                                <span class="fa fa-star checked"></span>
+                            {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    {% if friendship %}
+                        <p>{{ friendship.comment }}</p>
+                    {% endif %}
+
+                    <!--<div class="mt-3">
+                        <span class="fa fa-vk"></span>
+                        <span class="fa fa-youtube"></span>
+                        <span class="fa fa-telegram"></span>
+                        <span class="fa fa-twitch"></span>
+                        <span class="fa fa-instagram"></span>
+                    </div>-->
+
+                    <div class="btn-group dropup">
+                        <button class="btn btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            ...
+                        </button>
+                        <div class="dropdown-menu dropup">
+
+                            <a class="dropdown-item" id="dark-orange" href="/account/profile.html/user_id{{ recipient.user.id }}">Просмотреть профиль</a>
+                            <div class="dropdown-divider"></div>
+                            {% if recipient.user not in user.profile.blacklist.all %}
+                                {% if not friendship %}
+                                    <a class="dropdown-item" id="dark-orange" href="/account/add_to_friends/watched_user_id{{ recipient.user.id }}/next={{ request.get_full_path }}">Добавить в друзья</a>
+                                {% elif friendship.status != 3 %}
+                                    <a class="dropdown-item" id="dark-orange" href="/account/remove_from_friends/watched_user_id{{ recipient.user.id }}/next={{ request.get_full_path }}">Удалить из друзей</a>
+                                {% else %}
+                                    <a class="dropdown-item" id="dark-orange" href="/account/receive_to_friends/watched_user_id{{ recipient.user.id }}/next={{ request.get_full_path }}">Принять заявку</a>
+                                    <a class="dropdown-item" id="dark-orange" href="/account/reject_from_friends/watched_user_id{{ recipient.user.id }}/next={{ request.get_full_path }}">Отклонить заявку</a>
+                                {% endif %}
+                                    <form  id="form1_{{ recipient.user.id }}" method="post" action="/account/add_to_blacklist/watched_user_id{{ recipient.user.id }}/next={{ request.get_full_path }}" >
+                                        {% csrf_token %}
+                                    </form>
+                                    <a class="dropdown-item" id="dark-orange" href="#" onclick="document.getElementById('form1_{{ recipient.user.id }}').submit();">В чёрный список</a>
+                            {% else %}
+                                <form  id="form2_{{ recipient.user.id }}" method="post" action="/account/remove_from_blacklist/watched_user_id{{ recipient.user.id }}/next=/account/profile.html/user_id{{ recipient.user.id }}" >
+                                    {% csrf_token %}
+                                </form>
+                                <a class="dropdown-item" id="dark-orange" href="#" onclick="document.getElementById('form2_{{ recipient.user.id }}').submit();">Удалить из чёрного списка</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {% if recipient.user in user.profile.blacklist.all %}
+                    <p>Вы не можете написать сообщение тому, кто находится в Вашем чёрном списке</p>
+                {% elif user in recipient.blacklist.all %}
+                    <p>Вы не можете написать сообщение этому пользователю, поскольку находитесь в его чёрном списке</p>
+                {% else %}
+                    <form method="post" class="form-group" action="../account/message_writing_recipient_id={{ recipient.user.id }}_next={{ request.get_full_path }}">
+                        {% csrf_token %}
+                        <p>Напишите сообщение:</p>
+                        {{ message_writing_form.text }}
+                        <button type="submit" class="btn btn-primary">Отправить</button>
+                    </form>
+                {% endif %}
+
+
+                {% for message in messages %}
+                    <div class="container">
+
+                        <p>Время: {{ message.datetime }} МСК</p>
+
+                        {% if message.author == recipient%}
+                            <p>Получено:</p>
+                        {% else %}
+                            {% if message.status == 0 %}
+                                <p>Отправлено и не прочитано:</p>
+                            {% else %}
+                                <p>Отправлено и прочитано:</p>
+                            {% endif %}
+                        {% endif %}
+
+                        {{ message.text }}
+
+                    </div>
+                {% endfor %}
+
+            {% if messages %}
+            <div class="pagination col-sm-12 col-md-6 col-lg-4">
+                <span class="step-links">
+                    {% if messages.has_previous %}
+                        <a href="message_writing{{ recipient.user.id }}_page1.html">&laquo; Первая</a>
+                        <a href="message_writing{{ recipient.user.id }}_page{{ messages.previous_page_number }}.html">Назад</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Страница {{ messages.number }} из {{ messages.paginator.num_pages }}
+                    </span>
+
+                    {% if messages.has_next %}
+                        <a href="message_writing{{ recipient.user.id }}_page{{ messages.next_page_number }}.html">Далее</a>
+                        <a href="message_writing{{ recipient.user.id }}_page{{ messages.paginator.num_pages }}.html">Последняя &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+            {% endif %}
+
+            </div>
+        </div>
+
+
+
+    </main>
+
+
+{% endblock %}

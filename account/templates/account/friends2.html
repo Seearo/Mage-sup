@@ -1,0 +1,135 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% block content %}
+
+    <main class="bg-gold">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <h1 class="text-center">Аккаунт</h1>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <h2>Меню профиля</h2>
+                {% if user.is_superuser %}
+                <a href="../../superuser/" class="nav-link">Админ</a>
+                {% endif %}
+                <a href="profile.html/user_id{{ user.id }}" class="nav-link">Профиль</a>
+                <a href="diary.html" class="nav-link">Дневник</a>
+                <a href="bookmarks.html" class="nav-link">Закладки</a>
+                {% if user.profile.is_coach %}
+                <a href="../coach_office/user_id{{ user.id }}" class="nav-link">Наставник</a>
+                {% endif %}
+                <a href="message.html" class="nav-link">Сообщения</a>
+                <a href="friends.html" class="nav-link active btn-success">Друзья</a>
+                <a href="account.html" class="nav-link">Настройки</a>
+                <a href="#" class="nav-link bg-danger">На урок!</a>
+
+                <form method="post" class="form-group" action="../account/friends_sorting">
+                    {% csrf_token %}
+                    <p>Сортировка по:</p>
+                    {{ friends_sorting_form.fr_sorting }}
+                    <button type="submit" class="btn btn-primary">Применить</button>
+                </form>
+
+            </div>
+       <div class="col-sm-12 col-md-8 col-lg-8">
+            {% for friendship in friendships %}
+                <div class="container">
+                    <img src="{{ friendship.friend.photo.url }}" alt="" style="width:90px">
+
+                    <p>
+                    {% if friendship.friend.nickname %}
+                    <span>{{ friendship.friend.user.first_name }} {{ friendship.friend.nickname }} {{ friendship.friend.user.last_name }}</span>
+                    {% else %}
+                    <span>{{ friendship.friend.user.first_name }} {{ friendship.friend.user.username }} {{ friendship.friend.user.last_name }}</span>
+                    {% endif %}
+                    {% if friendship.friend.coach %}
+                    <span> Наставник</span>
+                    {% endif %}
+                    {% if friendship in friendships3 %}
+                    <span> Заявка на рассмотрении </span>
+                    {% elif friendship in friendships4 %}
+                    <span> Взаимный друг </span>
+                    {% elif friendship in friendships5 %}
+                    <span> Получена заявка в друзья </span>
+                    {% endif %}
+                    </p>
+
+                    {% if friendship.friend.coach %}
+                    <div>
+                        {% for star in friendship.friend.user.coach_profile.star_level.name %}
+                            {% if star == "★" %}
+                                <span class="fa fa-star checked"></span>
+                            {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <!--<div class="mt-3">
+                        <span class="fa fa-vk"></span>
+                        <span class="fa fa-youtube"></span>
+                        <span class="fa fa-telegram"></span>
+                        <span class="fa fa-twitch"></span>
+                        <span class="fa fa-instagram"></span>
+                    </div>-->
+
+                    <div class="btn-group dropup">
+                        <button class="btn btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            ...
+                        </button>
+                        <div class="dropdown-menu dropup">
+
+                            <a class="dropdown-item" id="dark-orange" href="/account/profile.html/user_id{{ friendship.friend.user.id }}">Просмотреть профиль</a>
+                            <a class="dropdown-item" id="dark-orange" href="#">Написать сообщение</a>
+                            <a class="dropdown-item" id="dark-orange" href="#">Написать комментарий</a>
+                            <div class="dropdown-divider"></div>
+                            {% if friendship not in friendships5 %}
+                                <a class="dropdown-item" id="dark-orange" href="/account/remove_from_friends/watched_user_id{{ friendship.friend.user.id }}/next={{ request.get_full_path }}">Удалить из друзей</a>
+                            {% else %}
+                                <a class="dropdown-item" id="dark-orange" href="/account/receive_to_friends/watched_user_id{{ friendship.friend.user.id }}/next={{ request.get_full_path }}">Принять заявку</a>
+                                <a class="dropdown-item" id="dark-orange" href="/account/reject_from_friends/watched_user_id{{ friendship.friend.user.id }}/next={{ request.get_full_path }}">Отклонить заявку</a>
+                            {% endif %}
+                            <a class="dropdown-item" id="dark-orange" href="#">Заблокировать</a>
+
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                    {% if friends_sorting == 3 %}
+                    <p>Нет отправленных заявок на рассмотрении</p>
+                    {% elif friends_sorting == 4 %}
+                    <p>Пока нет взаимных друзей</p>
+                    {% elif friends_sorting == 5 %}
+                    <p>Нет полученных заявок в друзья</p>
+                    {% else %}
+                    <p>Сюда можно добавить друзей.</p>
+                    {% endif %}
+            {% endfor %}
+
+            <div class="pagination col-sm-12 col-md-6 col-lg-4">
+                <span class="step-links">
+                    {% if friendships.has_previous %}
+                        <a href="friends1.html">&laquo; Первая</a>
+                        <a href="friends{{ friendships.previous_page_number }}.html">Назад</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Страница {{ friendships.number }} из {{ friendships.paginator.num_pages }}
+                    </span>
+
+                    {% if friendships.has_next %}
+                        <a href="friends{{ friendships.next_page_number }}.html">Далее</a>
+                        <a href="friends{{ friendships.paginator.num_pages }}.html">Последняя &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+
+            </div>
+        </div>
+
+
+
+    </main>
+
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends "coach_office/baseprofile.html" %}
+{% load static %}
+{% block content %}
+
+    <main class="bg-gold">
+        <div class="row">
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <h2>Меню профиля</h2>
+                {% if user.is_superuser %}
+                <a href="../../superuser/" class="nav-link">Админ</a>
+                {% endif %}
+                <a href="../../account/profile.html/user_id{{ user.id }}" class="nav-link">Профиль</a>
+                {% if new_diary > 0 %}
+                    <a href="../../account/diary.html" class="nav-link">Дневник ({{ new_diary }})</a>
+                {% else %}
+                    <a href="../../account/diary.html" class="nav-link">Дневник</a>
+                {% endif %}
+                <a href="../../account/bookmarks.html" class="nav-link">Закладки</a>
+                <a href="../coach_office/user_id{{ user.id }}" class="nav-link">Наставник</a>
+                <a href="../../account/timetable.html" class="nav-link">Расписание</a>
+                {% if new_messages > 0 %}
+                    <a href="../../account/message.html" class="nav-link">Сообщения ({{ new_messages }})</a>
+                {% else %}
+                    <a href="../../account/message.html" class="nav-link">Сообщения</a>
+                {% endif %}
+                <a href="../../account/friends.html" class="nav-link">Друзья</a>
+                <a href="../../account/blacklist.html" class="nav-link">Чёрный список</a>
+                <a href="../../account/account.html" class="nav-link">Настройки</a>
+            </div>
+
+    <div class="col-sm-12 col-md-6 col-lg-4">
+        <form method="post" class="form-group" action="../coach_office/available_time_form">
+            {% csrf_token %}
+            <h3>Настройка доступного времени</h3>
+            <p>Выберите доступное время, на которое могут записываться ученики на занятия. Не делайте много расписаний, т.к. есть ограничение на оперативную память.</p>
+            <p>Занятие длится 45 минут, перерыв 10 минут, подготовка к следующему уроку 5 минут, итого час.</p>
+            </br>
+            <p>Начальное время:</p>
+            {{ available_time_form.start_time }}
+            <p>Конечное время в тот же день:</p>
+            {{ available_time_form.end_time }}
+            </br>
+            <p>По каким дням недели:</p>
+            {{ available_time_form.day_of_week }}
+            </br>
+            <p>Дни начала и окончания этого расписания - можно не указывать, тогда с сегодняшнего дня на неопределённое время</p>
+            {{ available_time_form.start_day }}
+            {{ available_time_form.end_day }}
+            </br>
+            <button type="submit" class="btn btn-primary">Добавить расписание доступного времени</button>
+        </form>
+        <a href="available_time_as_student.html" class="btn btn-primary"><p>Просмотреть расписание доступного времени как студент</p></a>
+        <h3>Просмотр доступного времени</h3>
+        {% for available_time in available_times %}
+            <p>Доступное время для записи на урок: </p>
+            {%if available_time.end_day %}
+                <p>Даты: с {{ available_time.start_day }} по {{ available_time.end_day }}</p>
+            {% else %}
+                <p>Даты: с {{ available_time.start_day }} на неопределённый срок</p>
+            {% endif %}
+
+            {% if available_time.day_of_week == 0 %}
+                <p>Дни недели: понедельник</p>
+            {% elif available_time.day_of_week == 1 %}
+                <p>Дни недели: вторник</p>
+            {% elif available_time.day_of_week == 2 %}
+                <p>Дни недели: среда</p>
+            {% elif available_time.day_of_week == 3 %}
+                <p>Дни недели: четверг</p>
+            {% elif available_time.day_of_week == 4 %}
+                <p>Дни недели: пятница</p>
+            {% elif available_time.day_of_week == 5 %}
+                <p>Дни недели: суббота</p>
+            {% elif available_time.day_of_week == 6 %}
+                <p>Дни недели: воскресенье</p>
+            {% elif available_time.day_of_week == 7 %}
+                <p>Дни недели: понедельник, вторник, среда, четверг, пятница</p>
+            {% elif available_time.day_of_week == 8 %}
+                <p>Дни недели: суббота, воскресенье</p>
+            {% elif available_time.day_of_week == 9 %}
+                <p>Дни недели: все</p>
+            {% else %}
+                <p>Ошибка в данных, рекомендуем удалить и пересоздать расписание</p>
+            {% endif %}
+
+            {% if available_time.end_time == midnight %}
+                <p>Время: с {{ available_time.start_time }} до 24:00 </p>
+            {% else %}
+                <p>Время: с {{ available_time.start_time }} до {{ available_time.end_time }} </p>
+            {% endif %}
+
+            <form method="post" class="form-group" action="../coach_office/available_time_change_{{ available_time.id }}">
+                {% csrf_token %}
+                <p>Изменить даты начала и окончания расписания доступного времени:</p>
+                {{ available_time_change_form.start_day }}
+                {{ available_time_change_form.end_day }}
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </form>
+
+            <form method="post" class="form-group" action="../coach_office/available_time_delete_{{ available_time.id }}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Удалить это расписание</button>
+            </form>
+            </br>
+
+
+        {% endfor %}
+
+
+
+    </div>
+
+    </main>
+
+
+
+{% endblock %}

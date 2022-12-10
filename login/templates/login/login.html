@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="ru">
+
+<head class="head">
+    <TITLE>{{trademark}}, play like a pro!</TITLE>
+    <script src="js/main.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css'%}">
+    <!-- шрифт Опен Санс для текста и робото для заголовков-->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@600&family=Roboto+Slab:wght@700&family=Yanone+Kaffeesatz:wght@600&display=swap" rel="stylesheet">
+    <!-- bootstrap -->
+    <!-- CSS only -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <!-- Иконки-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+</head>
+
+{% block bodyclass %}
+<body class="bg-body">
+{% endblock %}
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+            <a class="navbar-brand" id="dark-orange" href="index.html">{{trademark}}</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+
+                    {% block nav-item-index %}
+                    <li class="nav-item">
+                    {% endblock %}
+                        <a class="nav-link" id="dark-orange" href="index.html">Главная <span class="sr-only">(current)</span></a>
+                    </li>
+                    {% block nav-item-random %}
+                    <li class="nav-item">
+                    {% endblock %}
+                        <a class="nav-link" id="dark-orange" href="random.html">Случайный поиск</a>
+                    </li>
+                    {% block nav-item-coach %}
+                    <li class="nav-item">
+                    {% endblock %}
+                        <a class="nav-link" id="dark-orange" href="coach.html">Наставники</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" id="dark-orange" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Сотрудники
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" id="dark-orange" href="team.html">Команда</a>
+                            <a class="dropdown-item" id="dark-orange" href="#">Стать участником проекта</a>
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" id="dark-orange" href="platform-standards.html">Правила и стандарты платформы</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="dark-orange" href="#" data-toggle="modal" data-target="#exampleModalLong">Регистрация/вход</a>
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Регистрация/вход {{trademark}}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active col-sm-6 col-lg-6 col-md-6" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Регистрация</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link col-sm-6 col-lg-6 col-md-6 offset-2" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Авторизация</a>
+                                            </li>
+                                        </ul>
+
+                                        <div class="tab-content" id="myTabContent">
+                                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                                <form method="post" action="/login/signup/next2={{ next_page }}">
+                                                    {% csrf_token %}
+                                                    <div class="form-group">
+                                                        <label for="exampleInputName1">Ваш логин: </label>
+                                                        <p class="form-control" placeholder="Ваш логин">{{ signup_form.username }}</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleInputEmail1">Электронная почта</label>
+                                                        <p class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Ваша почта">{{ signup_form.email }}</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword1">Пароль</label>
+                                                        <p class="form-control" id="exampleInputPassword1" placeholder="Ваш пароль">{{ signup_form.password1 }}</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword2">Подтвердите пароль</label>
+                                                        <p class="form-control" placeholder="Ваш пароль">{{ signup_form.password2 }}</p>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="exampleCheck1" checked>
+                                                        <label class="form-check-label" for="exampleCheck1">Я согласен с <a href="#">политикой конфиденциальности</a></label>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Готово</button>
+                                                </form>
+                                            </div>
+
+
+                                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                                                <form method="post" action="/login/next2={{ next_page }}">
+                                                    {% csrf_token %}
+                                                    <div class="form-group">
+                                                        <label for="exampleInputEmail1">Ваш логин</label>
+                                                        <p class="form-control" id="exampleInputEmail1" placeholder="Ваш логин">{{ login_form.username }}</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword1">Пароль</label>
+                                                        <p class="form-control" id="exampleInputPassword1" placeholder="Ваш пароль">{{ login_form.password }}</p>
+                                                    </div>
+                                                    <!--
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="exampleCheck1" checked>
+                                                        <label class="form-check-label" for="exampleCheck1">Запомнить меня</label>
+                                                    </div>
+                                                    -->
+                                                    <button type="submit" class="btn btn-primary">Готово</button>
+                                                </form>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--Конец модального окна -->
+                    </li>
+                </ul>
+                <form class="form-inline my-2 my-lg-0">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Искать" aria-label="Искать">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Поиск</button>
+                </form>
+            </div>
+        </nav>
+
+    {% block slideshow %}{% endblock %}
+
+    </header>
+
+    {% block content %}
+                                        <ul class="nav nav-tabs" id="myTab2" role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active col-sm-6 col-lg-6 col-md-6" id="home-tab2" data-toggle="tab" href="#home2" role="tab" aria-controls="home" aria-selected="true">Регистрация</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link col-sm-6 col-lg-6 col-md-6 offset-2" id="profile-tab2" data-toggle="tab" href="#profile2" role="tab" aria-controls="profile" aria-selected="false">Авторизация</a>
+                                            </li>
+                                        </ul>
+
+                                        <div class="tab-content" id="myTabContent">
+                                            <div class="tab-pane fade show active" id="home2" role="tabpanel" aria-labelledby="home-tab">
+                                                <form method="post" action="/login/signup/next2={{ next_page }}">
+                                                    {% csrf_token %}
+                                                    <div class="form-group">
+                                                        <label for="exampleInputName2">Ваш логин: </label>
+                                                        <p class="form-control" placeholder="Ваш логин">{{ signup_form.username }}</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleInputEmail2">Электронная почта</label>
+                                                        <p class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Ваша почта">{{ signup_form.email }}</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword3">Пароль</label>
+                                                        <p class="form-control" id="exampleInputPassword3" placeholder="Ваш пароль">{{ signup_form.password1 }}</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword4">Подтвердите пароль</label>
+                                                        <p class="form-control" placeholder="Ваш пароль">{{ signup_form.password2 }}</p>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="exampleCheck2" checked>
+                                                        <label class="form-check-label" for="exampleCheck2">Я согласен с <a href="#">политикой конфиденциальности</a></label>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary">Готово</button>
+                                                </form>
+                                            </div>
+
+
+                                            <div class="tab-pane fade" id="profile2" role="tabpanel" aria-labelledby="profile-tab">
+                                                <form method="post" action="/login/next2={{ next_page }}">
+                                                    {% csrf_token %}
+                                                    <div class="form-group">
+                                                        <label for="exampleInputEmail2">Ваш логин</label>
+                                                        <p class="form-control" id="exampleInputEmail2" placeholder="Ваш логин">{{ login_form.username }}</p>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="exampleInputPassword2">Пароль</label>
+                                                        <p class="form-control" id="exampleInputPassword2" placeholder="Ваш пароль">{{ login_form.password }}</p>
+                                                    </div>
+                                                    <!--
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="exampleCheck1" checked>
+                                                        <label class="form-check-label" for="exampleCheck2">Запомнить меня</label>
+                                                    </div>
+                                                    -->
+                                                    <button type="submit" class="btn btn-primary">Готово</button>
+                                                </form>
+                                            </div>
+
+                                        </div>
+
+    {% endblock %}
+
+    <footer>
+        <div class="row">
+            <div class="col-sm-6 col-md-6 col-lg-4 text-center">
+                <p>Все права защищены &copy;{{trademark}}, 2019-{{current_year}}</p>
+                <p>Политика <a href="#">конфиденциальности</a></p>
+                <p>Используя этот сайт, вы автоматически принимаете <a href="#">пользовательское соглашение</a> и <a href="doc.html">правила использования сервиса {{trademark}}</a></p>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-4 text-center">
+                <a href="#">Партнёры {{trademark}}</a><br>
+                <a href="partnership.html">Стать партнёром {{trademark}}</a>
+            </div>
+
+            <div class="col-sm-6 col-md-6 col-lg-4 text-center">
+                <h2>Меню</h2>
+                <a href="index.html">Главная</a><br>
+                <a href="random.html">Случайный поиск</a><br>
+                <a href="coach.html">Наставники</a><br>
+                <a href="team.html">Команда</a><br>
+                <a href="#">Стать участником проекта</a><br>
+            </div>
+        </div>
+    </footer>
+    <!-- bootstrap-->
+    <!-- JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+
+</html>

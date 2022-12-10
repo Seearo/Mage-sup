@@ -1,0 +1,40 @@
+{% extends "superuser/base.html" %}
+{% load static %}
+
+{% block content %}
+    <main class="bg-gold">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <h1 class="text-center">Настройки</h1>
+            </div>
+            <div class="col-sm-12 col-md-6 col-lg-4">
+                <h2>Меню профиля</h2>
+                <a href="/superuser/" class="nav-link">Админ</a>
+                <a href="../../admin/" class="nav-link">Админка</a>
+                <a href="wants_to_coach.html" class="nav-link">Назначение</a>
+                <a href="list_of_coaches.html/1" class="nav-link">Наставники</a>
+                <a href="settings.html" class="nav-link active btn-success">Настройки</a>
+                <a href="../../account/profile.html/user_id{{ user.id }}" class="nav-link">Профиль</a>
+            </div>
+
+            <div class="col-sm-12 col-md-6 col-lg-4">
+            <form method="post" class="form-group" action="change_lessons_cap">
+                {% csrf_token %}
+                <p>Максимальное число предстоящих записей на урок для студента (не влияет на уже имеющиеся записи):</p>
+                {{ change_lessons_cap_form.registrations_cap }}
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </form>
+
+            <form method="post" class="form-group" action="change_registrations_period">
+                {% csrf_token %}
+                <p>Максимальное число дней вперёд, на которые можно записаться, для студента (если поставить больше, то есть риск вылета из-за ограничения на оперативную память):</p>
+                {{ change_registrations_period_form.registrations_period }}
+                <button type="submit" class="btn btn-primary">Сохранить</button>
+            </form>
+
+            </div>
+
+        </div>
+    </main>
+
+{% endblock %}

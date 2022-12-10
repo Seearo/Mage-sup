@@ -1,0 +1,1 @@
+default_app_config = 'coach_office.apps.CoachOfficeConfig'

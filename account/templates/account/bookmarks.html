@@ -1,0 +1,143 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% block content %}
+
+    <main class="bg-gold">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <h1 class="text-center">Закладки</h1>
+            </div>
+            <div class="col-sm-12 col-md-4  col-lg-4">
+                <h2>Меню профиля</h2>
+                {% if user.is_superuser %}
+                <a href="../../superuser/" class="nav-link">Админ</a>
+                {% endif %}
+                <a href="profile.html/user_id{{ user.id }}" class="nav-link">Профиль</a>
+                {% if new_diary > 0 %}
+                    <a href="diary.html" class="nav-link">Дневник ({{ new_diary }})</a>
+                {% else %}
+                    <a href="diary.html" class="nav-link">Дневник</a>
+                {% endif %}
+                <a href="bookmarks.html" class="nav-link active btn-success">Закладки</a>
+                {% if user.profile.is_coach %}
+                <a href="../coach_office/user_id{{ user.id }}" class="nav-link">Наставник</a>
+                {% endif %}
+                <a href="timetable.html" class="nav-link">Расписание</a>
+                {% if new_messages > 0 %}
+                    <a href="message.html" class="nav-link">Сообщения ({{ new_messages }})</a>
+                {% else %}
+                    <a href="message.html" class="nav-link">Сообщения</a>
+                {% endif %}
+                <a href="friends.html" class="nav-link">Друзья</a>
+                <a href="blacklist.html" class="nav-link">Чёрный список</a>
+                <a href="account.html" class="nav-link">Настройки</a>
+
+                <form method="post" class="form-group" action="../account/bookmarks_sorting">
+                    {% csrf_token %}
+                    <p>Сортировка по:</p>
+                    {{ bookmarks_sorting_form.bm_sorting }}
+                    <button type="submit" class="btn btn-primary">Применить</button>
+                </form>
+                <!--<form class="form-group">
+
+                    <label class="w-100">Сортировка по
+                        <select class="form-control  w-100">
+                            <option>новым</option>
+                            <option>всем</option>
+                            <option>играм</option>
+                            <option>звёздам +</option>
+                            <option>звёзды - </option>
+                        </select>
+                    </label>
+                    <button type="submit" class="btn btn-primary">Применить</button>
+                    </form>-->
+
+            </div>
+            <div class="col-sm-12 col-md-8 col-lg-8">
+                {% for bookmark in bookmarks %}
+                <div class="container">
+                    {% if bookmark.profile.photo %}
+                    <img src="{{ bookmark.profile.photo.url }}" alt="" style="width:90px">
+                    {% endif %}
+                    {% if bookmark.profile.nickname %}
+                    <p><span>{{ bookmark.first_name }} {{ bookmark.profile.nickname }} {{ bookmark.last_name }}</span> <span>Наставник</span>
+                    {% else %}
+                    <p><span>{{ bookmark.first_name }} {{ bookmark.username }} {{ bookmark.last_name }}</span> <span>Наставник</span>
+                    {% endif %}
+                    {% if bookmark.is_superuser %}
+                        <span> Администратор</span>
+                    {% endif %}
+                    </p>
+                    <!--<p>Пользователь добавлен в закладки!</p>-->
+                    <div>
+                        {% for star in bookmark.coach_profile.star_level.name %}
+                            {% if star == "★" %}
+                                <span class="fa fa-star checked"></span>
+                            {% else %}
+                                <span class="fa fa-star"></span>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <!--<div class="mt-3">
+                        <span class="fa fa-vk"></span>
+                        <span class="fa fa-youtube"></span>
+                        <span class="fa fa-telegram"></span>
+                        <span class="fa fa-twitch"></span>
+                        <span class="fa fa-instagram"></span>
+                    </div>-->
+                    <div class="btn-group dropup">
+                        <button class="btn btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            ...
+                        </button>
+                        <div class="dropdown-menu dropup">
+
+                            <a class="dropdown-item" id="dark-orange" href="/account/registration.html_coach_id{{ bookmark.id }}">Запись</a>
+                            <a class="dropdown-item" id="dark-orange" href="/account/profile.html/user_id{{ bookmark.id }}">Просмотреть профиль</a>
+                            {% if bookmark not in user.profile.blacklist.all %}
+                                <a class="dropdown-item" id="dark-orange" href="/account/message_writing{{ bookmark.id }}_page1.html">Написать сообщение</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" id="dark-orange" href="/account/remove_from_bookmarks/watched_user_id{{ bookmark.id }}/next=/account/bookmarks.html">Удалить из закладок</a>
+                                <form  id="form1_{{ bookmark.id }}" method="post" action="/account/add_to_blacklist/watched_user_id{{ bookmark.id }}/next={{ request.get_full_path }}" >
+                                    {% csrf_token %}
+                                </form>
+                                <a class="dropdown-item" id="dark-orange" href="#" onclick="document.getElementById('form1_{{ bookmark.id }}').submit();">В чёрный список</a>
+                            {% else %}
+                                <form  id="form2_{{ bookmark.id }}" method="post" action="/account/remove_from_blacklist/watched_user_id{{ bookmark.id }}/next=/account/profile.html/user_id{{ bookmark.id }}" >
+                                    {% csrf_token %}
+                                </form>
+                                <a class="dropdown-item" id="dark-orange" href="#" onclick="document.getElementById('form2_{{ bookmark.id }}').submit();">Удалить из чёрного списка</a>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <p>Сюда можно добавить Наставников.</p>
+                {% endfor %}
+
+            <div class="pagination col-sm-12 col-md-6 col-lg-4">
+                <span class="step-links">
+                    {% if bookmarks.has_previous %}
+                        <a href="bookmarks1.html">&laquo; Первая</a>
+                        <a href="bookmarks{{ bookmarks.previous_page_number }}.html">Назад</a>
+                    {% endif %}
+
+                    <span class="current">
+                        Страница {{ bookmarks.number }} из {{ bookmarks.paginator.num_pages }}
+                    </span>
+
+                    {% if bookmarks.has_next %}
+                        <a href="bookmarks{{ bookmarks.next_page_number }}.html">Далее</a>
+                        <a href="bookmarks{{ bookmarks.paginator.num_pages }}.html">Последняя &raquo;</a>
+                    {% endif %}
+                </span>
+            </div>
+
+            </div>
+
+
+
+        </div>
+    </main>
+
+{% endblock %}

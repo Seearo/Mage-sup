@@ -1,0 +1,171 @@
+{% extends "account/base.html" %}
+{% load static %}
+{% block content %}
+
+    <main class="bg-gold">
+        <div class="row">
+            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
+                <h1 class="text-center">Расписание</h1>
+            </div>
+            <div class="col-sm-12 col-md-4  col-lg-4">
+                <h2>Меню профиля</h2>
+                {% if user.is_superuser %}
+                <a href="../../superuser/" class="nav-link">Админ</a>
+                {% endif %}
+                <a href="profile.html/user_id{{ user.id }}" class="nav-link">Профиль</a>
+                {% if new_diary > 0 %}
+                    <a href="diary.html" class="nav-link">Дневник ({{ new_diary }})</a>
+                {% else %}
+                    <a href="diary.html" class="nav-link">Дневник</a>
+                {% endif %}
+                <a href="bookmarks.html" class="nav-link">Закладки</a>
+                {% if user.profile.is_coach %}
+                <a href="../coach_office/user_id{{ user.id }}" class="nav-link">Наставник</a>
+                {% endif %}
+                <a href="timetable.html" class="nav-link active btn-success">Расписание</a>
+                {% if new_messages > 0 %}
+                    <a href="message.html" class="nav-link">Сообщения ({{ new_messages }})</a>
+                {% else %}
+                    <a href="message.html" class="nav-link">Сообщения</a>
+                {% endif %}
+                <a href="friends.html" class="nav-link">Друзья</a>
+                <a href="blacklist.html" class="nav-link">Чёрный список</a>
+                <a href="account.html" class="nav-link">Настройки</a>
+
+            </div>
+
+       <div class="col-sm-12 col-md-8 col-lg-8">
+           <p>После урока не забудьте заглянуть в дневник!</p>
+           <br/>
+            {% if user.profile.coach %}
+                <a class="btn btn-primary" href="../coach_office/available_time.html"><p>Настроить доступное время Наставника</p></a>
+                {% if not user.coach_profile.contacts %}
+                    <p>Не забудьте также заполнить контактные данные для игр в разделе Наставник, их увидят ученики перед уроком</p>
+                {% else %}
+                    <p>Ваши контактные данные для игр, доступные только ученикам и модераторам:</p>
+                    <p>{{ user.coach_profile.contacts }}</p>
+                {% endif %}
+               <br/>
+
+                <h2>Расписание Наставника</h2>
+                {% if not registrations_coach %}
+                    <p>Не запланировано предстоящих занятий в качестве Наставника</p>
+                {% else %}
+                    {% for registration, student, gamedirection, year, month, day, hour, minute in registrations_coach %}
+                        <div class="container">
+                            {% if student.photo %}
+                            <img src="{{ student.photo.url }}" alt="" style="width:90px">
+                            {% endif %}
+                            {% if student.nickname %}
+                                <p>Студент <a href="profile.html/user_id{{ student.user.id }}">{{ student.user.first_name }} {{ student.nickname }} {{ student.user.last_name }}</a>: {{ day }}.{{ month }}.{{ year }} {{ hour }}:{{ minute }} МСК</p>
+                            {% else %}
+                                <p>Студент <a href="profile.html/user_id{{ student.user.id }}">{{ student.user.first_name }} {{ student.user.username }} {{ student.user.last_name }}</a>: {{ day }}.{{ month }}.{{ year }} {{ hour }}:{{ minute }} МСК</p>
+                            {% endif %}
+                            {% if gamedirection %}
+                                {% if gamedirection.game != "account.Game.None" %}
+                                    <p>Игра: {{ gamedirection.game }}</p>
+                                {% endif %}
+                                {% if gamedirection.direction != "account.Direction.None" %}
+                                    <p>Направление: {{ gamedirection.direction }}</p>
+                                {% endif %}
+                                {% if gamedirection.region != "account.Region.None" %}
+                                    <p>Регион: {{ gamedirection.region }}</p>
+                                {% endif %}
+                            {% endif %}
+                            {% if registration.contacts %}
+                                <p>Контактные данные студента:</p>
+                                <p>{{ registration.contacts }}</p>
+                            {% elif student.contacts %}
+                                <p>Контактные данные студента:</p>
+                                <p>{{ student.contacts }}</p>
+                            {% endif %}
+                            {% if registration.email %}
+                                <p>Email студента:</p>
+                                <p>{{ registration.emails }}</p>
+                            {% elif student.user.email %}
+                                <p>Email студента:</p>
+                                <p>{{ student.user.email }}</p>
+                            {% endif %}
+                            {% if registration.phone_number %}
+                                <p>Телефонный номер студента:</p>
+                                <p>{{ registration.phone_number }}</p>
+                            {% elif student.phone_number %}
+                                <p>Телефонный номер студента:</p>
+                                <p>{{ student.phone_number }}</p>
+                            {% endif %}
+                            <div class="btn-group dropup">
+                                <button class="btn btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    ...
+                                </button>
+                                <div class="dropdown-menu dropup">
+                                    <a class="dropdown-item" id="dark-orange" href="/account/profile.html/user_id{{ student.user.id }}">Просмотреть профиль</a>
+                                    <a class="dropdown-item" id="dark-orange" href="/account/message_writing{{ student.user.id }}_page1.html">Написать сообщение</a>
+                                    <div class="dropdown-divider"></div>
+                                    <form  id="form1_{{ student.user.id }}" method="post" action="../account/unregister_registration_id{{ registration.id }}_next_{{ request.get_full_path }}" >
+                                        {% csrf_token %}
+                                    </form>
+                                    <a class="dropdown-item" id="dark-orange" href="#" onclick="document.getElementById('form1_{{ student.user.id }}').submit();">Отменить урок</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+           {% endif %}
+
+                <h2>Расписание студента</h2>
+                {% if not registrations_student %}
+                    <p>Не запланировано предстоящих занятий в качестве студента</p>
+                {% else %}
+                     {% if user.profile.contacts %}
+                        <p>Ваши контактные данные для игр, которые видят только Наставники и модераторы </p>
+                        <p>{{ user.profile.contacts }}</p>
+                    {% else %}
+                        <p>Заполните контактные данные для игр в разделе Настройки, их увидит Наставник перед уроком</p>
+                    {% endif %}
+                    {% for id, coach, gamedirection, year, month, day, hour, minute in registrations_student %}
+                        <div class="container">
+                            {% if coach.photo %}
+                            <img src="{{ coach.photo.url }}" alt="" style="width:90px">
+                            {% endif %}
+                            {% if coach.nickname %}
+                                <p>Наставник <a href="profile.html/user_id{{ coach.user.id }}">{{ coach.user.first_name }} {{ coach.nickname }} {{ coach.user.last_name }}</a>: {{ day }}.{{ month }}.{{ year }} {{ hour }}:{{ minute }} МСК</p>
+                            {% else %}
+                                <p>Наставник <a href="profile.html/user_id{{ coach.user.id }}">{{ coach.user.first_name }} {{ coach.user.username }} {{ coach.user.last_name }}</a>: {{ day }}.{{ month }}.{{ year }} {{ hour }}:{{ minute }} МСК</p>
+                            {% endif %}
+                            {% if gamedirection %}
+                                {% if gamedirection.game != "account.Game.None" %}
+                                    <p>Игра: {{ gamedirection.game }}</p>
+                                {% endif %}
+                                {% if gamedirection.direction != "account.Direction.None" %}
+                                    <p>Направление: {{ gamedirection.direction }}</p>
+                                {% endif %}
+                                {% if gamedirection.region != "account.Region.None" %}
+                                    <p>Регион: {{ gamedirection.region }}</p>
+                                {% endif %}
+                            {% endif %}
+                            {% if coach.user.coach_profile.contacts %}
+                                <p>Контактные данные Наставника:</p>
+                                <p>{{ coach.user.coach_profile.contacts }}</p>
+                            {% endif %}
+                            <div class="btn-group dropup">
+                                <button class="btn btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    ...
+                                </button>
+                                <div class="dropdown-menu dropup">
+                                    <a class="dropdown-item" id="dark-orange" href="/account/profile.html/user_id{{ coach.user.id }}">Просмотреть профиль</a>
+                                    <a class="dropdown-item" id="dark-orange" href="/account/message_writing{{ coach.user.id }}_page1.html">Написать сообщение</a>
+                                    <div class="dropdown-divider"></div>
+                                    <form  id="form1_{{ student.user.id }}" method="post" action="../account/unregister_registration_id{{ id }}_next_{{ request.get_full_path }}" >
+                                        {% csrf_token %}
+                                    </form>
+                                    <a class="dropdown-item" id="dark-orange" href="#" onclick="document.getElementById('form1_{{ student.user.id }}').submit();">Отменить урок</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+        </div>
+        </div>
+    </main>
+
+{% endblock %}

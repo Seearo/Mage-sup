@@ -1,0 +1,229 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+h1, h2 , h3 {
+    font-family: 'Roboto Slab', serif;
+    font-weight: 700;
+
+}
+p {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+
+}
+a {
+    font-family: 'Yanone Kaffeesatz', sans-serif;
+    font-size: 24px;
+
+}
+
+.header {
+    display: inline-block;
+    background-color: #3287a8;
+    width: 100vw;
+}
+
+.slide {
+    width: 100vw;
+    height: 100vh;
+}
+
+.carousel-inner {
+    width: 100vw;
+    height: 100vh;
+}
+
+.screen {
+    width: 100vw;
+    height: 100vh;
+}
+#dark-orange {
+    color: darkorange;
+}
+.bg-dark-orange {
+    background-color: darkorange;
+}
+#bg-gold {
+    background-color: gold;
+}
+.bg-gold {
+    background-color: gold;
+}
+#bg-body {
+    background-color: beige;
+}
+.bg-body {
+    background-color: beige;
+}
+.col {
+  display: flex;
+}
+.active {
+    text-decoration: underline;
+}
+
+.chat-with-coach {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    z-index: 2000;
+
+}
+/* Календарь css ниже*/
+ul {list-style-type: none;}
+body {font-family: Verdana, sans-serif;}
+
+.month {
+    padding: 70px 25px;
+    width: 100%;
+    background: #1abc9c;
+    text-align: center;
+}
+
+.month ul {
+    margin: 0;
+    padding: 0;
+}
+
+.month ul li {
+    color: white;
+    font-size: 20px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.month .prev {
+    float: left;
+    padding-top: 10px;
+}
+
+.month .next {
+    float: right;
+    padding-top: 10px;
+}
+
+.weekdays {
+    margin: 0;
+    padding: 10px 0;
+    background-color: #ddd;
+}
+
+.weekdays li {
+    display: inline-block;
+    width: 13.6%;
+    color: #666;
+    text-align: center;
+}
+
+.days {
+    padding: 10px 0;
+    background: #eee;
+    margin: 0;
+}
+
+.days li {
+    list-style-type: none;
+    display: inline-block;
+    width: 13.6%;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size:12px;
+    color: #777;
+}
+
+.days li .active {
+    padding: 5px;
+    background: #1abc9c;
+    color: white !important
+}
+
+/* Add media queries for smaller screens */
+@media screen and (max-width:720px) {
+    .weekdays li, .days li {width: 13.1%;}
+}
+
+@media screen and (max-width: 420px) {
+    .weekdays li, .days li {width: 12.5%;}
+    .days li .active {padding: 2px;}
+}
+
+@media screen and (max-width: 290px) {
+    .weekdays li, .days li {width: 12.2%;}
+}
+/* Цвет звезд*/
+.checked {
+    color: orange;
+}
+.form-check-label {
+    display: inline-block;
+}
+/* Стили для расписания, комментариев и чатов! Style the container with a rounded border, grey background and some padding and margin */
+.container {
+    border: 2px solid #ccc;
+    background-color: #eee;
+    border-radius: 5px;
+    padding: 16px;
+    margin: 16px 0;
+    /* Добавляем оверфлоу*/
+}
+.scroll {
+    overflow-y: auto;
+    height: 100vh;
+}
+/* Clear floats after containers */
+.container::after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/* Float images inside the container to the left. Add a right margin, and style the image as a circle */
+.container img {
+    float: left;
+    margin-right: 20px;
+    border-radius: 50%;
+}
+
+/* Increase the font-size of a span element */
+.container span {
+    font-size: 20px;
+    margin-right: 15px;
+}
+
+/* Add media queries for responsiveness. This will center both the text and the image inside the container */
+@media (max-width: 500px) {
+  .container {
+    text-align: center;
+  }
+
+  .container img {
+    margin: auto;
+    float: none;
+    display: block;
+  }
+}
+/* стили чата */
+.container img.right {
+    float: right;
+    margin-left: 20px;
+    margin-right:0;
+}
+
+/* Style time text */
+.time-right {
+    float: right;
+    color: #aaa;
+}
+
+/* Style time text */
+.time-left {
+    float: left;
+    color: #999;
+}
+
+.progress-bar {
+
+}

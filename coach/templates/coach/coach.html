@@ -1,0 +1,114 @@
+{% extends "coach/base.html" %}
+{% load static %}
+{% block content %}
+
+    <main class="bg-gold">
+        <div class="row text-center">
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                <h1>Все Наставники {{trademark}}</h1>
+            </div>
+
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12">
+                <button data-toggle="collapse" data-target="#demo" class="btn btn-primary">Фильтр наставников</button>
+                <!-- API школ на будущее-->
+
+                <!--<button data-toggle="collapse" data-target="#school" class="btn btn-primary">Школы</button>
+
+                <div id="school" class="collapse">
+                    <h2>Школы используют API сайта для развития конкуренции.</h2>
+                    <p>Вы получаете полный доступ к API, уже вшитый в наш сайт. При этом вы создаете отдельную структуру, имеющую свою ценовую политику, статистику и другое. Вам лишь нужно оплачивать API сервиса по тарифному плану. GTL не несет никакой ответсвенности за вашу деятельность!</p>
+                </div>
+                -->
+                <!-- API школ на будущее-->
+                <div id="demo" class="collapse">
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group w-75">
+
+
+                            <label for="inputState" class="ml-3">Ваша игра</label>
+                            <select id="inputState" class="form-control ml-3">
+                                <option selected>Выбирайте...</option>
+                                <option>World of Warcraft</option>
+                                <option>Overwatch</option>
+                                <option>StarCraft 2</option>
+                                <option>Dota 2</option>
+                                <option>Valorant</option>
+                                <option>Hearthstone</option>
+                            </select>
+                            <label for="inputState2" class="ml-3">Уровень тренера</label>
+                            <select id="inputState2" class="form-control ml-3">
+                                <option selected>Выбирайте...</option>
+                                <option>Новичок</option>
+                                <option>1 звезда</option>
+                                <option>2 звезды</option>
+                                <option>3 звезды</option>
+                                <option>4 звезды</option>
+                                <option>5 звезд</option>
+                            </select>
+                            <label for="inputState3" class="ml-3">Ваш навык</label>
+                            <select id="inputState3" class="form-control ml-3">
+                                <option selected>Выбирайте...</option>
+                                <option>Никогда не играл</option>
+                                <option>Только начал</option>
+                                <option>Освоил основы</option>
+                                <option>Средний игрок</option>
+                                <option>Лезу в топ</option>
+                                <option>Я про! Просто посмотреть</option>
+                            </select>
+                            <label for="inputState4" class="ml-3">Направление</label>
+                            <select id="inputState4" class="ml-3 form-control w-100">
+                                <option selected>Выбирайте...</option>
+                                <option>Искать по любым направлениям</option>
+                                <option>Выбрать все направления</option>
+                                <option>PvE и PvP</option>
+                                <option>Экономика</option>
+                                <option>PvP</option>
+                                <option>PvE</option>
+                            </select>
+
+                        </div>
+                    </div>
+                    <button class="btn btn-primary">Поиск</buton>
+                </div>
+            </div>
+            <div class="card-group">
+                <div class="col-sm-12 col-md-6 col-lg-4">
+                    <div class="card bg-primary text-white " style="display: inline-block">
+                        <img class="card-img-top" src="{% static 'img/test-coach-img.jpg' %}" {{cardImgAlt}}>
+                        <div class="card-body text-center">
+                            <h4 class="card-title">{{firstName}} {{nickName}} {{lastName}}</h4>
+                            <p class="card-text">{{infoCoach}}</p>
+                            <p class="card-cost">{{costCoach}}</p><!-- Цена кауча -->
+                            <div>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star checked"></span>
+                                <span class="fa fa-star"></span>
+                                <span class="fa fa-star"></span>
+                            </div>
+                            <a {{regToCoach}}} class="btn btn-warning">
+                                <h3>Регистрация</h3>
+                            </a>
+                            <a {{profileToCoach}}} class="btn btn-warning">
+                                <h3>Профиль ></h3>
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- test-->
+
+            <div class="col-12 col-sm-12 col-md-12 col-lg-12 align-text-bottom">
+                <ul class="pagination align-baseline offset-4">
+                    <li class="page-item disabled"><a class="page-link" href="#">Пред</a></li>
+                    <li class="page-item active center"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">След</a></li>
+                </ul>
+            </div>
+        </div>
+    </main>
+    
+{% endblock %}
